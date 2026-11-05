@@ -137,7 +137,7 @@ h1 .amp{font-family:var(--hand);color:var(--accent);font-size:1.15em;display:inl
 .ml:hover{transform:translateY(-2px)}
 .ml.yt{background:#e62117}
 .ml.sp{background:#1db954}
-#yt-wrap,#yt-player{position:fixed;left:-9999px;top:0;width:200px;height:200px;pointer-events:none}
+#yt-song,#yt-player{position:fixed;left:-9999px;top:0;width:200px;height:200px;pointer-events:none}
 .music{position:fixed;right:calc(16px + env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:40;display:flex;align-items:center;gap:10px;background:var(--paper);border:1px solid var(--line);border-radius:99px;padding:6px 16px 6px 6px;box-shadow:0 8px 24px rgba(58,20,36,.18)}
 .music-btn{width:44px;height:44px;border-radius:50%;border:0;background:var(--accent);color:#fff;font-size:1.2rem;display:grid;place-items:center}
 .music.playing .music-btn{animation:beatbtn 1.2s ease-in-out infinite}
@@ -149,8 +149,14 @@ h1 .amp{font-family:var(--hand);color:var(--accent);font-size:1.15em;display:inl
 
 /* nossa música */
 .our-song{display:flex;align-items:center;gap:clamp(20px,5vw,44px);flex-wrap:wrap;background:var(--paper);border:1px solid var(--line);border-radius:28px;padding:clamp(20px,4vw,36px)}
-.vinyl{flex:none;width:clamp(120px,24vw,170px);aspect-ratio:1;max-width:100%;border-radius:50%;background:repeating-radial-gradient(circle,#1a1015 0 2px,#2b1a22 2px 4px);display:grid;place-items:center;box-shadow:0 12px 30px rgba(58,20,36,.3);animation:spin 6s linear infinite}
-.vinyl span{width:38%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,var(--bg) 0 9%,var(--accent) 10% 100%)}
+.vinyl{flex:none;width:clamp(130px,24vw,180px);aspect-ratio:1;max-width:100%;border-radius:50%;border:0;padding:0;cursor:pointer;position:relative;background:repeating-radial-gradient(circle,#1a1015 0 2px,#2b1a22 2px 4px);display:grid;place-items:center;box-shadow:0 12px 30px rgba(58,20,36,.3);transition:transform .2s}
+.vinyl:hover{transform:scale(1.04)}
+.vinyl.playing{animation:spin 4s linear infinite}
+.vinyl span{grid-area:1/1;width:38%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,var(--bg) 0 9%,var(--accent) 10% 100%)}
+.vinyl-ico{grid-area:1/1;z-index:1;width:46px;height:46px;border-radius:50%;background:#fff;color:var(--accent);display:grid;place-items:center;font-size:1.1rem;padding-left:3px;box-shadow:0 4px 14px rgba(0,0,0,.3)}
+.vinyl.playing .vinyl-ico{padding-left:0;font-size:.9rem;animation:spin 4s linear infinite reverse}
+.dedic{margin:0 0 1em;padding:14px 18px;border-left:4px solid var(--accent);background:var(--bg);border-radius:0 14px 14px 0;font:600 1.45rem/1.3 var(--hand);color:var(--ink);max-width:46ch}
+.dedic cite{display:block;font-style:normal;color:var(--accent);margin-top:6px}
 @keyframes spin{to{transform:rotate(360deg)}}
 .song-artist{font:700 1.7rem/1 var(--hand);color:var(--accent);margin:0 0 .7em}
 .song-links{display:flex;flex-wrap:wrap;gap:8px}
@@ -372,11 +378,13 @@ footer .big{font:700 2.4rem/1.1 var(--hand);color:var(--accent);display:block;ma
 
   <!-- NOSSA MÚSICA -->
   <section class="our-song" data-tab="musica" aria-label="Nossa música">
-    <div class="vinyl" aria-hidden="true"><span></span></div>
+    <button class="vinyl" id="song-play" type="button" aria-label="Tocar Imaturo"><span></span><b class="vinyl-ico" id="song-ico">▶</b></button>
+    <div id="yt-song" aria-hidden="true"></div>
     <div style="min-width:0">
       <div class="eyebrow">Nossa música</div>
       <h2 style="margin-bottom:.1em">Imaturo</h2>
       <p class="song-artist">Jão</p>
+      <blockquote class="dedic">Gabriel, essa é a nossa música. Dedico ela a você, meu amor: por cada dia desde 02 de junho de 2022, por cada quilômetro que a gente venceu pra continuar junto, e por todos os dias que ainda vêm. ♡<cite>— Bia</cite></blockquote>
       <div class="song-links">
         <a class="ml yt" href="https://www.youtube.com/results?search_query=Imaturo+J%C3%A3o" target="_blank" rel="noopener">▶ Ouvir no YouTube</a>
         <a class="ml sp" href="https://open.spotify.com/search/Imaturo%20J%C3%A3o" target="_blank" rel="noopener">● Ouvir no Spotify</a>
@@ -762,34 +770,51 @@ $('#up-file').addEventListener('change',async e=>{
 });
 
 /* ---- trilha sonora ---- */
-const au=(()=>{ let player=null, ready=null; const VID='9J4uukzYHUA';
-  const o={src:'',paused:true,removeAttribute(){},
+function ytAudio(divId,VID,loop){ let player=null, ready=null;
+  const o={src:'',paused:true,_end:null,removeAttribute(){},addEventListener(ev,fn){ if(ev==='ended') o._end=fn; },
     play(){ return ensure().then(p=>new Promise((res,rej)=>{ p.unMute(); p.setVolume(100); p.playVideo(); let t=0;
       const iv=setInterval(()=>{ const st=p.getPlayerState(); if(st===1){clearInterval(iv);o.paused=false;res();} else if(++t>25){clearInterval(iv);p.pauseVideo();rej(new Error('bloqueado'));} },120); })); },
     pause(){ o.paused=true; if(player) player.pauseVideo(); } };
-  function ensure(){ if(ready) return ready; ready=new Promise(res=>{ window.onYouTubeIframeAPIReady=()=>{ player=new YT.Player('yt-player',{width:200,height:200,videoId:VID,
-      playerVars:{playsinline:1,controls:0,loop:1,playlist:VID,rel:0},events:{onReady:()=>res(player)}}); };
-    const sc=document.createElement('script'); sc.src='https://www.youtube.com/iframe_api'; document.head.appendChild(sc); }); return ready; }
-  return o; })(); let musicaUrl=null, mutadoPeloUsuario=false;
+  function ensure(){ if(ready) return ready; ready=ytApi().then(()=>new Promise(res=>{ player=new YT.Player(divId,{width:200,height:200,videoId:VID,
+      playerVars:Object.assign({playsinline:1,controls:0,rel:0},loop?{loop:1,playlist:VID}:{}),
+      events:{onReady:()=>res(player),onStateChange:e=>{ if(e.data===0&&!loop){ o.paused=true; o._end&&o._end(); } }}}); })); return ready; }
+  return o; }
+let _ytApi=null; function ytApi(){ if(_ytApi) return _ytApi; _ytApi=new Promise(res=>{ if(window.YT&&YT.Player) return res(); window.onYouTubeIframeAPIReady=res;
+  const sc=document.createElement('script'); sc.src='https://www.youtube.com/iframe_api'; document.head.appendChild(sc); }); return _ytApi; }
+const au=ytAudio('yt-player','9J4uukzYHUA',true); let musicaUrl=null, mutadoPeloUsuario=false;
 function setPlaying(on){ $('#music').classList.toggle('playing',on); $('#music-ico').textContent=on?'🔊':'🔇';
   $('#music-btn').setAttribute('aria-pressed',on); $('#music-btn').setAttribute('aria-label',on?'Mutar a trilha sonora':'Tocar a trilha sonora'); }
 function tocar(){ if(!musicaUrl) return Promise.reject(); if(!au.src) au.src=musicaUrl; return au.play().then(()=>setPlaying(true)); }
 $('#music-btn').addEventListener('click',e=>{
   e.stopPropagation();
   if(!musicaUrl){ say('A música ainda não foi colocada no site.'); return; }
-  if(au.paused){ mutadoPeloUsuario=false; tocar().then(()=>{$('#toast').hidden=true;}).catch(()=>say('Não consegui tocar a música.')); }
+  if(au.paused){ mutadoPeloUsuario=false; if(!sa.paused){ sa.pause(); songState(false); } tocar().then(()=>{$('#toast').hidden=true;}).catch(()=>say('Não consegui tocar a música.')); }
   else { au.pause(); setPlaying(false); mutadoPeloUsuario=true; }
 });
 // navegador só deixa tocar som depois do primeiro clique na página
-function primeira(e){ if(e&&e.target&&e.target.closest&&e.target.closest('#music')) return; if(musicaUrl&&!mutadoPeloUsuario&&au.paused) tocar().then(()=>{ $('#toast').hidden=true; ['pointerdown','keydown','touchstart'].forEach(ev=>document.removeEventListener(ev,primeira)); }).catch(()=>{}); }
+function primeira(e){ if(e&&e.target&&e.target.closest&&e.target.closest('#music,#song-play')) return; if(musicaUrl&&!mutadoPeloUsuario&&au.paused) tocar().then(()=>{ $('#toast').hidden=true; ['pointerdown','keydown','touchstart'].forEach(ev=>document.removeEventListener(ev,primeira)); }).catch(()=>{}); }
 ['pointerdown','keydown','touchstart'].forEach(ev=>document.addEventListener(ev,primeira));
 function autoTocar(){ if(mutadoPeloUsuario) return; tocar().catch(()=>say('♪ Toca em qualquer lugar da tela pra música começar',true)); }
+
+/* ---- nossa música (Imaturo) ---- */
+const sa=ytAudio('yt-song','irRY_P47ZgE',false); let songUrl=null;
+function songState(on){ $('#song-play').classList.toggle('playing',on); $('#song-ico').textContent=on?'❚❚':'▶'; $('#song-play').setAttribute('aria-label',on?'Pausar Imaturo':'Tocar Imaturo'); }
+$('#song-play').addEventListener('click',e=>{
+  e.stopPropagation();
+  if(!songUrl){ say('O áudio de Imaturo ainda não foi colocado no site.'); return; }
+  if(sa.paused){
+    if(!au.paused){ au.pause(); setPlaying(false); mutadoPeloUsuario=true; }
+    if(!sa.src) sa.src=songUrl;
+    sa.play().then(()=>{ songState(true); const [x,y]=center($('#song-play')); burst(x,y,14); }).catch(()=>say('Não consegui tocar a música.'));
+  } else { sa.pause(); songState(false); }
+});
+sa.addEventListener('ended',()=>songState(false));
 
 renderFotos(); renderJarCount();
 FOTOS=[{"url": "midia/01.jpg", "slot": "capa", "tipo": "foto", "legenda": "", "criadoEm": "2026-11-05T14:58:20.250Z"}, {"url": "midia/02.jpg", "slot": "comeco", "tipo": "foto", "legenda": "", "criadoEm": "2026-11-05T15:00:11.937Z"}, {"url": "midia/03.jpg", "slot": "namoro", "tipo": "foto", "legenda": "", "criadoEm": "2026-11-05T15:02:37.124Z"}, {"url": "midia/04.jpg", "slot": "casinha", "tipo": "foto", "legenda": "", "criadoEm": "2026-11-05T15:02:47.160Z"}, {"url": "midia/05.jpg", "slot": "distancia", "tipo": "foto", "legenda": "um coração, duas cidades", "criadoEm": "2026-11-05T15:15:00.000Z"}, {"url": "midia/06.jpg", "slot": "galeria", "tipo": "foto", "legenda": "", "criadoEm": "2026-11-05T15:23:46.934Z"}, {"url": "midia/07.jpg", "slot": "galeria", "tipo": "foto", "legenda": "", "criadoEm": "2026-11-05T15:23:47.964Z"}, {"url": "midia/08.mp4", "slot": "galeria", "tipo": "video", "legenda": "", "criadoEm": "2026-11-05T15:23:55.434Z"}, {"url": "midia/09.mp4", "slot": "galeria", "tipo": "video", "legenda": "", "criadoEm": "2026-11-05T15:23:56.497Z"}, {"url": "midia/10.mp4", "slot": "galeria", "tipo": "video", "legenda": "", "criadoEm": "2026-11-05T15:23:58.308Z"}, {"url": "midia/11.mp4", "slot": "galeria", "tipo": "video", "legenda": "", "criadoEm": "2026-11-05T15:23:59.580Z"}, {"url": "midia/12.mp4", "slot": "galeria", "tipo": "video", "legenda": "", "criadoEm": "2026-11-05T15:24:01.373Z"}, {"url": "midia/13.mp4", "slot": "galeria", "tipo": "video", "legenda": "", "criadoEm": "2026-11-05T15:24:03.385Z"}, {"url": "midia/14.mp4", "slot": "galeria", "tipo": "video", "legenda": "", "criadoEm": "2026-11-05T15:24:04.604Z"}, {"url": "midia/15.mp4", "slot": "galeria", "tipo": "video", "legenda": "", "criadoEm": "2026-11-05T15:24:06.198Z"}, {"url": "midia/16.mp4", "slot": "galeria", "tipo": "video", "legenda": "", "criadoEm": "2026-11-05T15:24:07.591Z"}, {"url": "midia/17.mp4", "slot": "galeria", "tipo": "video", "legenda": "", "criadoEm": "2026-11-05T15:24:08.689Z"}, {"url": "midia/18.mp4", "slot": "galeria", "tipo": "video", "legenda": "", "criadoEm": "2026-11-05T15:24:09.925Z"}, {"url": "midia/19.mp4", "slot": "galeria", "tipo": "video", "legenda": "", "criadoEm": "2026-11-05T15:24:11.144Z"}, {"url": "midia/20.mp4", "slot": "galeria", "tipo": "video", "legenda": "", "criadoEm": "2026-11-05T15:24:12.235Z"}, {"url": "midia/21.jpg", "slot": "galeria", "tipo": "foto", "legenda": "", "criadoEm": "2026-11-05T15:24:13.556Z"}, {"url": "midia/22.mp4", "slot": "galeria", "tipo": "video", "legenda": "", "criadoEm": "2026-11-05T15:24:14.851Z"}, {"url": "midia/23.mp4", "slot": "galeria", "tipo": "video", "legenda": "", "criadoEm": "2026-11-05T15:24:16.332Z"}, {"url": "midia/24.jpg", "slot": "galeria", "tipo": "foto", "legenda": "", "criadoEm": "2026-11-05T15:24:17.381Z"}, {"url": "midia/25.jpg", "slot": "galeria", "tipo": "foto", "legenda": "", "criadoEm": "2026-11-05T15:24:18.580Z"}, {"url": "midia/26.jpg", "slot": "galeria", "tipo": "foto", "legenda": "", "criadoEm": "2026-11-05T15:24:20.027Z"}, {"url": "midia/27.jpg", "slot": "galeria", "tipo": "foto", "legenda": "", "criadoEm": "2026-11-05T15:24:21.146Z"}, {"url": "midia/28.jpg", "slot": "galeria", "tipo": "foto", "legenda": "", "criadoEm": "2026-11-05T15:24:22.572Z"}, {"url": "midia/29.jpg", "slot": "galeria", "tipo": "foto", "legenda": "", "criadoEm": "2026-11-05T15:24:24.074Z"}, {"url": "midia/30.jpg", "slot": "galeria", "tipo": "foto", "legenda": "", "criadoEm": "2026-11-05T15:24:25.162Z"}, {"url": "midia/31.jpg", "slot": "galeria", "tipo": "foto", "legenda": "", "criadoEm": "2026-11-05T15:24:26.469Z"}, {"url": "midia/32.jpg", "slot": "galeria", "tipo": "foto", "legenda": "", "criadoEm": "2026-11-05T15:24:27.643Z"}, {"url": "midia/33.jpg", "slot": "galeria", "tipo": "foto", "legenda": "", "criadoEm": "2026-11-05T15:24:28.715Z"}, {"url": "midia/34.jpg", "slot": "galeria", "tipo": "foto", "legenda": "", "criadoEm": "2026-11-05T15:24:29.973Z"}, {"url": "midia/35.jpg", "slot": "galeria", "tipo": "foto", "legenda": "", "criadoEm": "2026-11-05T15:24:31.080Z"}, {"url": "midia/36.jpg", "slot": "galeria", "tipo": "foto", "legenda": "", "criadoEm": "2026-11-05T15:24:32.198Z"}, {"url": "midia/37.jpg", "slot": "galeria", "tipo": "foto", "legenda": "", "criadoEm": "2026-11-05T15:24:33.386Z"}, {"url": "midia/38.jpg", "slot": "galeria", "tipo": "foto", "legenda": "", "criadoEm": "2026-11-05T15:24:34.672Z"}, {"url": "midia/39.jpg", "slot": "galeria", "tipo": "foto", "legenda": "", "criadoEm": "2026-11-05T15:24:35.863Z"}, {"url": "midia/40.jpg", "slot": "galeria", "tipo": "foto", "legenda": "", "criadoEm": "2026-11-05T15:24:36.833Z"}, {"url": "midia/41.jpg", "slot": "galeria", "tipo": "foto", "legenda": "", "criadoEm": "2026-11-05T15:24:37.943Z"}, {"url": "midia/42.jpg", "slot": "galeria", "tipo": "foto", "legenda": "", "criadoEm": "2026-11-05T15:24:39.024Z"}, {"url": "midia/43.jpg", "slot": "galeria", "tipo": "foto", "legenda": "", "criadoEm": "2026-11-05T15:24:40.121Z"}, {"url": "midia/44.jpg", "slot": "galeria", "tipo": "foto", "legenda": "", "criadoEm": "2026-11-05T15:24:42.347Z"}, {"url": "midia/45.mp4", "slot": "juntos", "tipo": "video", "legenda": "", "criadoEm": "2026-11-05T15:25:00.000Z"}];
 MOTIVOS=[{"texto": "Por que com você eu me sinto livre"}, {"texto": "Por que com você eu me sinto segura"}, {"texto": "Por que você me transforma numa versão melhor de mim mesma"}, {"texto": "Por que você me faz rir"}, {"texto": "Por que você é a melhor companhia para se estar"}, {"texto": "Por que sua inteligência me causa inveja"}, {"texto": "Por que eu admiro quem você se tornou"}, {"texto": "Por que você é meu esquerdo macho"}, {"texto": "Por que você me entende (as vezes kkkk)"}];
 renderFotos(); renderJarCount();
-musicaUrl='youtube'; $('#music-title').textContent='Por Você · Jão'; autoTocar();
+musicaUrl='youtube'; songUrl='youtube'; $('#music-title').textContent='Por Você · Jão'; autoTocar();
 </script>
 
 </body></html>
