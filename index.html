@@ -132,7 +132,8 @@ h1 .amp{font-family:var(--hand);color:var(--accent);font-size:1.15em;display:inl
 .toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:.7em 1.2em;border-radius:99px;z-index:70;font-weight:600;max-width:calc(100% - 32px);text-align:center;box-shadow:0 10px 30px rgba(0,0,0,.25)}
 
 /* trilha sonora */
-.music{text-decoration:none;color:inherit;position:fixed;right:calc(16px + env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:40;display:flex;align-items:center;gap:10px;background:var(--paper);border:1px solid var(--line);border-radius:99px;padding:6px 16px 6px 6px;box-shadow:0 8px 24px rgba(58,20,36,.18)}
+#yt-wrap,#yt-player{position:fixed;left:-9999px;top:0;width:200px;height:200px;pointer-events:none}
+.music{position:fixed;right:calc(16px + env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:40;display:flex;align-items:center;gap:10px;background:var(--paper);border:1px solid var(--line);border-radius:99px;padding:6px 16px 6px 6px;box-shadow:0 8px 24px rgba(58,20,36,.18)}
 .music-btn{width:44px;height:44px;border-radius:50%;border:0;background:var(--accent);color:#fff;font-size:1.2rem;display:grid;place-items:center}
 .music.playing .music-btn{animation:beatbtn 1.2s ease-in-out infinite}
 @keyframes beatbtn{0%,100%{transform:scale(1)}20%{transform:scale(1.12)}40%{transform:scale(1)}}
@@ -425,11 +426,11 @@ footer .big{font:700 2.4rem/1.1 var(--hand);color:var(--accent);display:block;ma
 </div>
 
 <div class="toast" id="toast" role="status" hidden></div>
-<a class="music" id="music" href="https://open.spotify.com/search/Por%20Voc%C3%AA%20J%C3%A3o" target="_blank" rel="noopener">
-  <span class="music-btn" aria-hidden="true">♪</span>
-  <span class="music-info"><b>Nossa música</b><span>Por Você · Jão, ouvir no Spotify</span></span>
-  <span id="music-btn" hidden></span><span id="music-ico" hidden></span><span id="music-title" hidden></span><audio id="music-audio" hidden></audio>
-</a>
+<div class="music" id="music">
+  <button class="music-btn" id="music-btn" type="button" aria-label="Tocar a trilha sonora" aria-pressed="false"><span id="music-ico">🔇</span></button>
+  <div class="music-info"><b>Trilha sonora</b><span id="music-title">Jão</span></div>
+  <div id="yt-player" aria-hidden="true"></div>
+</div>
 <div class="lb" id="lb" hidden><button class="x" id="lb-x" type="button" aria-label="Fechar">✕</button><figure><img id="lb-img" alt=""><video id="lb-vid" controls playsinline hidden></video><figcaption id="lb-cap"></figcaption>
   <div class="lb-tools" id="lb-tools" hidden>
     <label for="lb-move">Mover para</label>
@@ -723,7 +724,15 @@ $('#up-file').addEventListener('change',async e=>{
 });
 
 /* ---- trilha sonora ---- */
-const au=$('#music-audio'); let musicaUrl=null, mutadoPeloUsuario=false;
+const au=(()=>{ let player=null, ready=null; const VID='9J4uukzYHUA';
+  const o={src:'',paused:true,removeAttribute(){},
+    play(){ return ensure().then(p=>new Promise((res,rej)=>{ p.unMute(); p.setVolume(100); p.playVideo(); let t=0;
+      const iv=setInterval(()=>{ const st=p.getPlayerState(); if(st===1){clearInterval(iv);o.paused=false;res();} else if(++t>25){clearInterval(iv);p.pauseVideo();rej(new Error('bloqueado'));} },120); })); },
+    pause(){ o.paused=true; if(player) player.pauseVideo(); } };
+  function ensure(){ if(ready) return ready; ready=new Promise(res=>{ window.onYouTubeIframeAPIReady=()=>{ player=new YT.Player('yt-player',{width:200,height:200,videoId:VID,
+      playerVars:{playsinline:1,controls:0,loop:1,playlist:VID,rel:0},events:{onReady:()=>res(player)}}); };
+    const sc=document.createElement('script'); sc.src='https://www.youtube.com/iframe_api'; document.head.appendChild(sc); }); return ready; }
+  return o; })(); let musicaUrl=null, mutadoPeloUsuario=false;
 function setPlaying(on){ $('#music').classList.toggle('playing',on); $('#music-ico').textContent=on?'🔊':'🔇';
   $('#music-btn').setAttribute('aria-pressed',on); $('#music-btn').setAttribute('aria-label',on?'Mutar a trilha sonora':'Tocar a trilha sonora'); }
 function tocar(){ if(!musicaUrl) return Promise.reject(); if(!au.src) au.src=musicaUrl; return au.play().then(()=>setPlaying(true)); }
@@ -742,6 +751,7 @@ renderFotos(); renderJarCount();
 FOTOS=[{"url": "midia/01.jpg", "slot": "capa", "tipo": "foto", "legenda": "", "criadoEm": "2026-11-05T14:58:20.250Z"}, {"url": "midia/02.jpg", "slot": "comeco", "tipo": "foto", "legenda": "", "criadoEm": "2026-11-05T15:00:11.937Z"}, {"url": "midia/03.jpg", "slot": "namoro", "tipo": "foto", "legenda": "", "criadoEm": "2026-11-05T15:02:37.124Z"}, {"url": "midia/04.jpg", "slot": "casinha", "tipo": "foto", "legenda": "", "criadoEm": "2026-11-05T15:02:47.160Z"}, {"url": "midia/05.jpg", "slot": "distancia", "tipo": "foto", "legenda": "um coração, duas cidades", "criadoEm": "2026-11-05T15:15:00.000Z"}, {"url": "midia/06.jpg", "slot": "galeria", "tipo": "foto", "legenda": "", "criadoEm": "2026-11-05T15:23:46.934Z"}, {"url": "midia/07.jpg", "slot": "galeria", "tipo": "foto", "legenda": "", "criadoEm": "2026-11-05T15:23:47.964Z"}, {"url": "midia/08.mp4", "slot": "galeria", "tipo": "video", "legenda": "", "criadoEm": "2026-11-05T15:23:55.434Z"}, {"url": "midia/09.mp4", "slot": "galeria", "tipo": "video", "legenda": "", "criadoEm": "2026-11-05T15:23:56.497Z"}, {"url": "midia/10.mp4", "slot": "galeria", "tipo": "video", "legenda": "", "criadoEm": "2026-11-05T15:23:58.308Z"}, {"url": "midia/11.mp4", "slot": "galeria", "tipo": "video", "legenda": "", "criadoEm": "2026-11-05T15:23:59.580Z"}, {"url": "midia/12.mp4", "slot": "galeria", "tipo": "video", "legenda": "", "criadoEm": "2026-11-05T15:24:01.373Z"}, {"url": "midia/13.mp4", "slot": "galeria", "tipo": "video", "legenda": "", "criadoEm": "2026-11-05T15:24:03.385Z"}, {"url": "midia/14.mp4", "slot": "galeria", "tipo": "video", "legenda": "", "criadoEm": "2026-11-05T15:24:04.604Z"}, {"url": "midia/15.mp4", "slot": "galeria", "tipo": "video", "legenda": "", "criadoEm": "2026-11-05T15:24:06.198Z"}, {"url": "midia/16.mp4", "slot": "galeria", "tipo": "video", "legenda": "", "criadoEm": "2026-11-05T15:24:07.591Z"}, {"url": "midia/17.mp4", "slot": "galeria", "tipo": "video", "legenda": "", "criadoEm": "2026-11-05T15:24:08.689Z"}, {"url": "midia/18.mp4", "slot": "galeria", "tipo": "video", "legenda": "", "criadoEm": "2026-11-05T15:24:09.925Z"}, {"url": "midia/19.mp4", "slot": "galeria", "tipo": "video", "legenda": "", "criadoEm": "2026-11-05T15:24:11.144Z"}, {"url": "midia/20.mp4", "slot": "galeria", "tipo": "video", "legenda": "", "criadoEm": "2026-11-05T15:24:12.235Z"}, {"url": "midia/21.jpg", "slot": "galeria", "tipo": "foto", "legenda": "", "criadoEm": "2026-11-05T15:24:13.556Z"}, {"url": "midia/22.mp4", "slot": "galeria", "tipo": "video", "legenda": "", "criadoEm": "2026-11-05T15:24:14.851Z"}, {"url": "midia/23.mp4", "slot": "galeria", "tipo": "video", "legenda": "", "criadoEm": "2026-11-05T15:24:16.332Z"}, {"url": "midia/24.jpg", "slot": "galeria", "tipo": "foto", "legenda": "", "criadoEm": "2026-11-05T15:24:17.381Z"}, {"url": "midia/25.jpg", "slot": "galeria", "tipo": "foto", "legenda": "", "criadoEm": "2026-11-05T15:24:18.580Z"}, {"url": "midia/26.jpg", "slot": "galeria", "tipo": "foto", "legenda": "", "criadoEm": "2026-11-05T15:24:20.027Z"}, {"url": "midia/27.jpg", "slot": "galeria", "tipo": "foto", "legenda": "", "criadoEm": "2026-11-05T15:24:21.146Z"}, {"url": "midia/28.jpg", "slot": "galeria", "tipo": "foto", "legenda": "", "criadoEm": "2026-11-05T15:24:22.572Z"}, {"url": "midia/29.jpg", "slot": "galeria", "tipo": "foto", "legenda": "", "criadoEm": "2026-11-05T15:24:24.074Z"}, {"url": "midia/30.jpg", "slot": "galeria", "tipo": "foto", "legenda": "", "criadoEm": "2026-11-05T15:24:25.162Z"}, {"url": "midia/31.jpg", "slot": "galeria", "tipo": "foto", "legenda": "", "criadoEm": "2026-11-05T15:24:26.469Z"}, {"url": "midia/32.jpg", "slot": "galeria", "tipo": "foto", "legenda": "", "criadoEm": "2026-11-05T15:24:27.643Z"}, {"url": "midia/33.jpg", "slot": "galeria", "tipo": "foto", "legenda": "", "criadoEm": "2026-11-05T15:24:28.715Z"}, {"url": "midia/34.jpg", "slot": "galeria", "tipo": "foto", "legenda": "", "criadoEm": "2026-11-05T15:24:29.973Z"}, {"url": "midia/35.jpg", "slot": "galeria", "tipo": "foto", "legenda": "", "criadoEm": "2026-11-05T15:24:31.080Z"}, {"url": "midia/36.jpg", "slot": "galeria", "tipo": "foto", "legenda": "", "criadoEm": "2026-11-05T15:24:32.198Z"}, {"url": "midia/37.jpg", "slot": "galeria", "tipo": "foto", "legenda": "", "criadoEm": "2026-11-05T15:24:33.386Z"}, {"url": "midia/38.jpg", "slot": "galeria", "tipo": "foto", "legenda": "", "criadoEm": "2026-11-05T15:24:34.672Z"}, {"url": "midia/39.jpg", "slot": "galeria", "tipo": "foto", "legenda": "", "criadoEm": "2026-11-05T15:24:35.863Z"}, {"url": "midia/40.jpg", "slot": "galeria", "tipo": "foto", "legenda": "", "criadoEm": "2026-11-05T15:24:36.833Z"}, {"url": "midia/41.jpg", "slot": "galeria", "tipo": "foto", "legenda": "", "criadoEm": "2026-11-05T15:24:37.943Z"}, {"url": "midia/42.jpg", "slot": "galeria", "tipo": "foto", "legenda": "", "criadoEm": "2026-11-05T15:24:39.024Z"}, {"url": "midia/43.jpg", "slot": "galeria", "tipo": "foto", "legenda": "", "criadoEm": "2026-11-05T15:24:40.121Z"}, {"url": "midia/44.jpg", "slot": "galeria", "tipo": "foto", "legenda": "", "criadoEm": "2026-11-05T15:24:42.347Z"}, {"url": "midia/45.mp4", "slot": "juntos", "tipo": "video", "legenda": "", "criadoEm": "2026-11-05T15:25:00.000Z"}];
 MOTIVOS=[{"texto": "Por que com você eu me sinto livre"}, {"texto": "Por que com você eu me sinto segura"}, {"texto": "Por que você me transforma numa versão melhor de mim mesma"}, {"texto": "Por que você me faz rir"}, {"texto": "Por que você é a melhor companhia para se estar"}, {"texto": "Por que sua inteligência me causa inveja"}, {"texto": "Por que eu admiro quem você se tornou"}, {"texto": "Por que você é meu esquerdo macho"}, {"texto": "Por que você me entende (as vezes kkkk)"}];
 renderFotos(); renderJarCount();
+musicaUrl='youtube'; $('#music-title').textContent='Por Você · Jão'; autoTocar();
 </script>
 
 </body></html>
