@@ -155,6 +155,11 @@ h1 .amp{font-family:var(--hand);color:var(--accent);font-size:1.15em;display:inl
 .vinyl span{grid-area:1/1;width:38%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,var(--bg) 0 9%,var(--accent) 10% 100%)}
 .vinyl-ico{grid-area:1/1;z-index:1;width:46px;height:46px;border-radius:50%;background:#fff;color:var(--accent);display:grid;place-items:center;font-size:1.1rem;padding-left:3px;box-shadow:0 4px 14px rgba(0,0,0,.3)}
 .vinyl.playing .vinyl-ico{padding-left:0;font-size:.9rem;animation:spin 4s linear infinite reverse}
+.vinyl-wrap{position:relative;flex:none;margin-top:34px}
+.click-hint{position:absolute;z-index:2;bottom:93%;left:52%;font:700 1.6rem/1 var(--hand);color:var(--accent);white-space:nowrap;pointer-events:none;transform:rotate(-7deg);transform-origin:left bottom;animation:nudge 1.8s ease-in-out infinite;transition:opacity .4s}
+.click-hint svg{display:block;margin:-2px 0 0 -14px;transform:scaleX(1)}
+@keyframes nudge{0%,100%{transform:rotate(-7deg) translate(0,0)}50%{transform:rotate(-7deg) translate(-4px,4px)}}
+.vinyl-wrap.played .click-hint{opacity:0}
 .dedic{margin:0 0 1em;padding:14px 18px;border-left:4px solid var(--accent);background:var(--bg);border-radius:0 14px 14px 0;font:600 1.45rem/1.3 var(--hand);color:var(--ink);max-width:46ch}
 .dedic cite{display:block;font-style:normal;color:var(--accent);margin-top:6px}
 @keyframes spin{to{transform:rotate(360deg)}}
@@ -378,7 +383,10 @@ footer .big{font:700 2.4rem/1.1 var(--hand);color:var(--accent);display:block;ma
 
   <!-- NOSSA MÚSICA -->
   <section class="our-song" data-tab="musica" aria-label="Nossa música">
-    <button class="vinyl" id="song-play" type="button" aria-label="Tocar Imaturo"><span></span><b class="vinyl-ico" id="song-ico">▶</b></button>
+    <div class="vinyl-wrap" id="vinyl-wrap">
+      <span class="click-hint" aria-hidden="true">clica aqui ♡<svg viewBox="0 0 60 46" width="60" height="46"><path d="M52 4 C34 4 14 12 9 38" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><path d="M2 30 L9 40 L17 32" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <button class="vinyl" id="song-play" type="button" aria-label="Tocar Imaturo"><span></span><b class="vinyl-ico" id="song-ico">▶</b></button>
+    </div>
     <div id="yt-song" aria-hidden="true"></div>
     <div style="min-width:0">
       <div class="eyebrow">Nossa música</div>
@@ -798,7 +806,7 @@ function autoTocar(){ if(mutadoPeloUsuario) return; tocar().catch(()=>say('♪ T
 
 /* ---- nossa música (Imaturo) ---- */
 const sa=ytAudio('yt-song','irRY_P47ZgE',false); let songUrl=null;
-function songState(on){ $('#song-play').classList.toggle('playing',on); $('#song-ico').textContent=on?'❚❚':'▶'; $('#song-play').setAttribute('aria-label',on?'Pausar Imaturo':'Tocar Imaturo'); }
+function songState(on){ $('#song-play').classList.toggle('playing',on); if(on) $('#vinyl-wrap').classList.add('played'); $('#song-ico').textContent=on?'❚❚':'▶'; $('#song-play').setAttribute('aria-label',on?'Pausar Imaturo':'Tocar Imaturo'); }
 $('#song-play').addEventListener('click',e=>{
   e.stopPropagation();
   if(!songUrl){ say('O áudio de Imaturo ainda não foi colocado no site.'); return; }
