@@ -147,6 +147,18 @@ h1 .amp{font-family:var(--hand);color:var(--accent);font-size:1.15em;display:inl
 @media (max-width:520px){.music-info{display:none}.music{padding:6px}}
 .toast{bottom:calc(84px + env(safe-area-inset-bottom,0px))!important}
 
+/* nossa música */
+.our-song{display:flex;align-items:center;gap:clamp(20px,5vw,44px);flex-wrap:wrap;background:var(--paper);border:1px solid var(--line);border-radius:28px;padding:clamp(20px,4vw,36px)}
+.vinyl{flex:none;width:clamp(120px,24vw,170px);aspect-ratio:1;max-width:100%;border-radius:50%;background:repeating-radial-gradient(circle,#1a1015 0 2px,#2b1a22 2px 4px);display:grid;place-items:center;box-shadow:0 12px 30px rgba(58,20,36,.3);animation:spin 6s linear infinite}
+.vinyl span{width:38%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,var(--bg) 0 9%,var(--accent) 10% 100%)}
+@keyframes spin{to{transform:rotate(360deg)}}
+.song-artist{font:700 1.7rem/1 var(--hand);color:var(--accent);margin:0 0 .7em}
+.song-links{display:flex;flex-wrap:wrap;gap:8px}
+.ml{font:700 .8rem/1 var(--body);text-decoration:none;color:#fff;padding:.65em 1em;border-radius:99px;white-space:nowrap;transition:transform .15s}
+.ml:hover{transform:translateY(-2px)}
+.ml.yt{background:#e62117}
+.ml.sp{background:#1db954}
+
 /* ---------- contagens ---------- */
 .countdowns{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px}
 .cd{border-radius:24px;padding:26px;background:var(--paper);border:1px solid var(--line)}
@@ -355,6 +367,21 @@ footer .big{font:700 2.4rem/1.1 var(--hand);color:var(--accent);display:block;ma
       </text>
     </svg>
     <figure class="vc" id="vc-fig" hidden><img id="vc-img" alt="Videochamada: os dois fazendo meio coração com a mão, que se junta no meio da tela"><figcaption id="vc-cap"></figcaption></figure>
+  </section>
+
+  <!-- NOSSA MÚSICA -->
+  <section class="our-song" data-tab="inicio" aria-label="Nossa música">
+    <div class="vinyl" aria-hidden="true"><span></span></div>
+    <div style="min-width:0">
+      <div class="eyebrow">Nossa música</div>
+      <h2 style="margin-bottom:.1em">Imaturo</h2>
+      <p class="song-artist">Jão</p>
+      <div class="song-links">
+        <a class="ml yt" href="https://www.youtube.com/results?search_query=Imaturo+J%C3%A3o" target="_blank" rel="noopener">▶ Ouvir no YouTube</a>
+        <a class="ml sp" href="https://open.spotify.com/search/Imaturo%20J%C3%A3o" target="_blank" rel="noopener">● Ouvir no Spotify</a>
+      </div>
+      <p class="small" style="margin:.8em 0 0">A trilha sonora que toca no site é “Por Você”, também do Jão.</p>
+    </div>
   </section>
 
   <!-- CONTAGENS -->
