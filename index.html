@@ -1,0 +1,721 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+</head><body>
+<title>Bianca & Gabriel</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Young+Serif&family=Figtree:wght@400;500;600;700&family=Caveat:wght@500;700&display=swap">
+<style>
+/* Layout: álbum de recados — capítulos numa linha do tempo, polaroids coladas, e brincadeiras entre um capítulo e outro */
+:root{
+  --bg:#fbf0f3; --paper:#fffafb; --ink:#3a1424; --muted:#8a5a6c;
+  --accent:#e0336f; --accent-2:#ff9fbd; --sea:#1f7a83; --line:#efc6d3;
+  --display:"Young Serif", Georgia, serif;
+  --body:"Figtree", system-ui, sans-serif;
+  --hand:"Caveat", "Comic Sans MS", cursive;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#1b0e14; --paper:#2a1720; --ink:#f8e6ec; --muted:#c99bad;
+  --accent:#ff6b9d; --accent-2:#a8325c; --sea:#5fc6cf; --line:#4b2a38; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#1b0e14; --paper:#2a1720; --ink:#f8e6ec; --muted:#c99bad;
+  --accent:#ff6b9d; --accent-2:#a8325c; --sea:#5fc6cf; --line:#4b2a38; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:400 1.05rem/1.65 var(--body);overflow-x:hidden;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:1000px;margin:0 auto;padding-block:28px 80px;display:grid;gap:64px}
+
+/* ---------- abinhas ---------- */
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+.tabs{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--bg);padding-block:14px;max-width:1000px;margin:0 auto;display:flex;gap:8px;overflow-x:auto;justify-content:safe center;scrollbar-width:none;border-bottom:1px solid var(--line)}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex:none;border:2px solid var(--line);background:var(--paper);color:var(--ink);border-radius:99px;padding:.45em 1.05em;font-weight:600;font-size:.95rem;transition:background .15s,border-color .15s,transform .15s}
+.tab:hover{border-color:var(--accent);transform:translateY(-1px)}
+.tab[aria-selected="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+[data-tab]{animation:pop .3s ease-out both}
+button{font:inherit;cursor:pointer}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.eyebrow{font:700 .78rem/1 var(--body);letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+h2{font:400 clamp(1.7rem,4.4vw,2.6rem)/1.1 var(--display);margin:.3em 0 .4em;text-wrap:balance}
+.hand{font-family:var(--hand)}
+.btn{border:0;border-radius:99px;padding:.65em 1.3em;background:var(--accent);color:#fff;font-weight:600;transition:transform .15s}
+.btn:hover{transform:translateY(-2px)}
+.btn.ghost{background:transparent;color:var(--accent);border:2px solid var(--accent)}
+
+/* ---------- hero ---------- */
+.hero{display:grid;grid-template-columns:1.25fr 1fr;gap:40px;align-items:center}
+h1{font:400 clamp(3rem,9vw,5.8rem)/.92 var(--display);margin:.3em 0 .3em;text-wrap:balance}
+h1 .amp{font-family:var(--hand);color:var(--accent);font-size:1.15em;display:inline-block;transform:rotate(-8deg) translateY(.06em);margin:0 .06em;animation:beat 1.6s ease-in-out infinite}
+@keyframes beat{0%,100%{transform:rotate(-8deg) translateY(.06em) scale(1)}15%{transform:rotate(-8deg) translateY(.06em) scale(1.15)}30%{transform:rotate(-8deg) translateY(.06em) scale(1)}45%{transform:rotate(-8deg) translateY(.06em) scale(1.1)}}
+.lede{max-width:36ch;color:var(--muted);font-size:1.15rem;margin:0}
+.ticker{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px}
+.tick{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:10px 14px;min-width:84px;text-align:center}
+.tick b{display:block;font:400 1.9rem/1 var(--display);font-variant-numeric:tabular-nums}
+.tick span{font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+.ticker-cap{font:600 1.35rem var(--hand);color:var(--accent);margin-top:8px}
+
+/* ---------- polaroid ---------- */
+.polaroid{background:#fff;padding:12px 12px 46px;box-shadow:0 10px 28px rgba(58,20,36,.2);position:relative;max-width:100%;margin:0;transform:rotate(var(--r,2deg));transition:transform .3s}
+.polaroid:hover{transform:rotate(0deg) scale(1.03)}
+.polaroid .ph{aspect-ratio:4/5;max-width:100%;background:repeating-linear-gradient(45deg,#f6dfe6 0 10px,#fbeaf0 10px 20px);display:grid;place-items:center;overflow:hidden;cursor:pointer;border:0;padding:0;width:100%}
+.polaroid img{width:100%;height:100%;object-fit:cover;display:block}
+.polaroid .ph em{font:600 1.15rem var(--hand);color:#b07990;font-style:normal;padding:8px;text-align:center}
+.polaroid figcaption{position:absolute;left:8px;right:8px;bottom:8px;text-align:center;font:700 1.35rem/1.1 var(--hand);color:#3a1424;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tape{position:absolute;top:-12px;left:50%;width:84px;height:24px;transform:translateX(-50%) rotate(-4deg);background:rgba(224,51,111,.3);z-index:1}
+
+/* ---------- cena da balada ---------- */
+.scene{background:linear-gradient(160deg,#2b0f2e,#4a1240 60%,#1d0b25);color:#fbe7f0;border-radius:28px;padding:clamp(22px,5vw,48px);position:relative;overflow:hidden}
+.scene::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 15% 20%,rgba(255,80,160,.35),transparent 30%),radial-gradient(circle at 85% 30%,rgba(80,200,255,.25),transparent 30%),radial-gradient(circle at 50% 100%,rgba(255,200,80,.2),transparent 40%);animation:lights 5s ease-in-out infinite alternate;pointer-events:none}
+@keyframes lights{to{transform:translateX(-6%) rotate(6deg)}}
+.scene>*{position:relative}
+.scene .eyebrow{color:#ff9fc6}
+.chat{display:grid;gap:12px;margin:22px 0;max-width:560px}
+.bubble{padding:12px 16px;border-radius:18px;max-width:85%;font-size:1.05rem;animation:pop .35s ease-out both}
+.bubble.him{background:#fff;color:#3a1424;border-bottom-left-radius:4px;justify-self:start}
+.bubble.her{background:#ff4f91;color:#fff;border-bottom-right-radius:4px;justify-self:end}
+.bubble small{display:block;font-size:.72rem;opacity:.65;font-weight:700;text-transform:uppercase;letter-spacing:.08em}
+@keyframes pop{from{opacity:.0;transform:scale(.8) translateY(8px)}}
+.choices{display:flex;flex-wrap:wrap;gap:12px;align-items:center;min-height:56px;position:relative}
+.choices .btn{background:#ff4f91}
+#btn-sim{background:#fff;color:#3a1424;transition:transform .25s}
+.scene-end{font:700 clamp(1.6rem,4vw,2.2rem)/1.2 var(--hand);color:#ffc2da}
+
+/* ---------- linha do tempo ---------- */
+.timeline{position:relative;display:grid;gap:72px}
+.timeline::before{content:"";position:absolute;left:11px;top:6px;bottom:0;width:2px;background:repeating-linear-gradient(var(--line) 0 8px,transparent 8px 14px)}
+.ch{display:grid;grid-template-columns:24px 1fr 250px;gap:0 28px;align-items:start}
+.dot{width:24px;height:24px;border-radius:50%;background:var(--bg);border:3px solid var(--accent);margin-top:4px;position:relative;z-index:1}
+.ch.apart .dot{border-color:var(--sea)}
+.ch.big .dot{background:var(--accent)}
+.when{font:700 .8rem/1 var(--body);letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+.ch.apart .when{color:var(--sea)}
+.ch p{margin:0 0 .8em;max-width:58ch}
+.quote{font:700 1.8rem/1.2 var(--hand);color:var(--accent)}
+.place{display:inline-flex;gap:6px;align-items:center;font-size:.85rem;color:var(--muted);border:1px solid var(--line);border-radius:99px;padding:3px 10px;background:var(--paper)}
+
+/* ---------- mapa ---------- */
+.map{background:var(--paper);border:1px solid var(--line);border-radius:24px;padding:clamp(18px,4vw,36px);display:grid;grid-template-columns:1fr 1.2fr;gap:28px;align-items:center}
+.map svg{width:100%;height:auto;max-width:100%;display:block}
+.map .stat{display:flex;gap:22px;flex-wrap:wrap;margin-top:14px}
+.map .stat b{display:block;font:400 2rem/1 var(--display);color:var(--sea)}
+.map .stat span{font-size:.85rem;color:var(--muted)}
+
+.vc{grid-column:1/-1;margin:8px 0 0;cursor:pointer;text-align:center}
+.vc img{width:100%;max-width:100%;border-radius:22px;box-shadow:0 14px 40px rgba(31,122,131,.25);display:block}
+.vc figcaption{font:700 1.8rem var(--hand);color:var(--sea);margin-top:8px}
+
+/* mais fotos/vídeos por capítulo */
+.slotbox{display:grid;gap:16px;justify-items:center;min-width:0}
+.slotbox .polaroid{width:100%}
+.thumbs{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.thumb{width:58px;height:58px;padding:0;border:3px solid #fff;border-radius:8px;overflow:hidden;box-shadow:0 4px 12px rgba(58,20,36,.18);background:#f6dfe6;position:relative;transition:transform .15s}
+.thumb:hover{transform:scale(1.08) rotate(-3deg)}
+.thumb img,.thumb video{width:100%;height:100%;object-fit:cover;display:block}
+.thumb.is-video::after{content:"▶";position:absolute;inset:auto 3px 3px auto;font-size:10px;color:#fff;background:rgba(0,0,0,.55);border-radius:50%;width:18px;height:18px;display:grid;place-items:center;padding-left:2px}
+.add-media{font-size:.85rem;padding:.4em 1em}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:.7em 1.2em;border-radius:99px;z-index:70;font-weight:600;max-width:calc(100% - 32px);text-align:center;box-shadow:0 10px 30px rgba(0,0,0,.25)}
+
+/* trilha sonora */
+.music{text-decoration:none;color:inherit;position:fixed;right:calc(16px + env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:40;display:flex;align-items:center;gap:10px;background:var(--paper);border:1px solid var(--line);border-radius:99px;padding:6px 16px 6px 6px;box-shadow:0 8px 24px rgba(58,20,36,.18)}
+.music-btn{width:44px;height:44px;border-radius:50%;border:0;background:var(--accent);color:#fff;font-size:1.2rem;display:grid;place-items:center}
+.music.playing .music-btn{animation:beatbtn 1.2s ease-in-out infinite}
+@keyframes beatbtn{0%,100%{transform:scale(1)}20%{transform:scale(1.12)}40%{transform:scale(1)}}
+.music-info{display:grid;line-height:1.2;font-size:.8rem;color:var(--muted)}
+.music-info b{color:var(--ink);font-size:.85rem}
+@media (max-width:520px){.music-info{display:none}.music{padding:6px}}
+.toast{bottom:calc(84px + env(safe-area-inset-bottom,0px))!important}
+
+/* ---------- contagens ---------- */
+.countdowns{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px}
+.cd{border-radius:24px;padding:26px;background:var(--paper);border:1px solid var(--line)}
+.cd b{display:block;font:400 3rem/1 var(--display);color:var(--accent);font-variant-numeric:tabular-nums;margin:.15em 0}
+.cd p{margin:0;color:var(--muted)}
+
+/* ---------- pote ---------- */
+.jar-wrap{display:grid;grid-template-columns:220px 1fr;gap:36px;align-items:center}
+.jar{width:200px;height:240px;border:0;background:none;padding:0;position:relative;transition:transform .2s}
+.jar:hover{transform:rotate(-4deg)}
+.jar:active{transform:rotate(6deg) scale(.96)}
+.jar svg{width:100%;height:100%}
+.note{min-height:150px;background:#fff6a8;color:#3a2a10;padding:24px 26px;box-shadow:0 8px 22px rgba(0,0,0,.15);transform:rotate(-1.5deg);font:600 1.6rem/1.3 var(--hand);display:flex;align-items:center;animation:pop .35s ease-out both}
+.add-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+.add-row input{flex:1;min-width:0;padding:.65em 1em;border-radius:99px;border:1px solid var(--line);background:var(--paper);color:var(--ink);font:inherit}
+.small{font-size:.85rem;color:var(--muted)}
+
+/* ---------- quiz ---------- */
+.quiz{background:var(--paper);border:1px solid var(--line);border-radius:24px;padding:clamp(20px,4vw,36px);max-width:680px}
+.quiz .q{font:400 1.45rem/1.3 var(--display);margin:.4em 0 .8em}
+.opts{display:grid;gap:10px}
+.opt{text-align:left;padding:.8em 1.1em;border-radius:14px;border:2px solid var(--line);background:var(--bg);color:var(--ink);transition:border-color .15s,background .15s}
+.opt:hover{border-color:var(--accent)}
+.opt.ok{border-color:#2f9e6b;background:color-mix(in srgb,#2f9e6b 15%,var(--bg))}
+.opt.no{border-color:#c0392b;background:color-mix(in srgb,#c0392b 12%,var(--bg))}
+.progress{height:6px;border-radius:99px;background:var(--line);overflow:hidden;margin-top:10px}
+.progress i{display:block;height:100%;background:var(--accent);transition:width .3s}
+
+/* ---------- galeria ---------- */
+.gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:36px 26px;margin-top:28px}
+.upload-bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:12px}
+.upload-bar select,.upload-bar input[type=text]{padding:.6em .9em;border-radius:12px;border:1px solid var(--line);background:var(--paper);color:var(--ink);font:inherit;min-width:0}
+#status{font-size:.9rem;color:var(--muted)}
+
+/* ---------- lightbox ---------- */
+.lb{position:fixed;inset:0;background:rgba(20,6,12,.88);display:grid;place-items:center;z-index:50;padding:24px}
+.lb figure{margin:0;max-width:min(92vw,900px);text-align:center}
+.lb img{max-height:78vh;width:auto;max-width:100%;border:10px solid #fff;box-shadow:0 20px 60px rgba(0,0,0,.5)}
+.lb video{max-height:78vh;max-width:100%;border:10px solid #fff;box-shadow:0 20px 60px rgba(0,0,0,.5);background:#000}
+.polaroid .ph{position:relative}
+.polaroid video{width:100%;height:100%;object-fit:cover;display:block}
+.ph.is-video::after{content:"▶";position:absolute;right:10px;bottom:10px;width:34px;height:34px;border-radius:50%;background:rgba(0,0,0,.55);color:#fff;display:grid;place-items:center;font-size:14px;padding-left:3px}
+.lb figcaption{color:#fff;font:700 1.8rem var(--hand);margin-top:10px}
+.lb .x{position:absolute;top:calc(14px + env(safe-area-inset-top,0px));right:calc(14px + env(safe-area-inset-right,0px));background:#fff;color:#3a1424;border:0;border-radius:99px;width:44px;height:44px;font-size:1.3rem}
+
+.lb-tools{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:center;margin-top:16px;color:#fff;font-size:.95rem}
+.lb-tools select,.lb-tools input{padding:.55em .8em;border-radius:12px;border:0;font:inherit;min-width:0;background:#fff;color:#3a1424}
+.lb-tools .btn{padding:.55em 1.1em}
+.btn.danger{background:#c0392b;color:#fff;border-color:#c0392b}
+.btn.ghost.danger{background:transparent;color:#ffb3a8;border-color:#ffb3a8}
+.btn.ghost.light{color:#fff;border-color:#fff}
+#lb-msg{width:100%;text-align:center;color:#ffc2da}
+
+/* corações */
+.heart-fx{position:fixed;pointer-events:none;z-index:60;font-size:22px;animation:fly 1.4s ease-out forwards}
+@keyframes fly{to{transform:translate(var(--dx),var(--dy)) rotate(var(--rot)) scale(.6);opacity:0}}
+
+footer{text-align:center;color:var(--muted)}
+footer .big{font:700 2.4rem/1.1 var(--hand);color:var(--accent);display:block;margin-bottom:6px}
+
+@media (max-width:760px){
+  .hero,.map,.jar-wrap{grid-template-columns:1fr}
+  .hero .polaroid{max-width:280px;margin:0 auto}
+  .ch{grid-template-columns:24px 1fr;gap:0 18px}
+  .ch .slotbox{grid-column:2;max-width:230px;margin-top:22px}
+  .jar{margin:0 auto}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+<nav class="tabs" role="tablist" aria-label="Seções">
+  <button class="tab" role="tab" data-go="inicio" type="button">♡ Início</button>
+  <button class="tab" role="tab" data-go="balada" type="button">🪩 A balada</button>
+  <button class="tab" role="tab" data-go="historia" type="button">📖 Nossa história</button>
+  <button class="tab" role="tab" data-go="distancia" type="button">🚗 Distância</button>
+  <button class="tab" role="tab" data-go="pote" type="button">💌 Pote de motivos</button>
+  <button class="tab" role="tab" data-go="quiz" type="button">❓ Quiz</button>
+  <button class="tab" role="tab" data-go="album" type="button">📸 Álbum</button>
+</nav>
+
+<div class="wrap">
+
+  <!-- HERO -->
+  <header class="hero" data-tab="inicio">
+    <div>
+      <div class="eyebrow">Desde 2 de junho de 2022</div>
+      <h1>Bianca<span class="amp">&amp;</span>Gabriel</h1>
+      <p class="lede">Uma caloura, um veterano, uma balada de integração e uma resposta que mudou tudo.</p>
+      <div class="ticker" aria-label="Tempo de namoro">
+        <div class="tick"><b id="t-d">0</b><span>dias</span></div>
+        <div class="tick"><b id="t-h">0</b><span>horas</span></div>
+        <div class="tick"><b id="t-m">0</b><span>min</span></div>
+        <div class="tick"><b id="t-s">0</b><span>seg</span></div>
+      </div>
+      <div class="ticker-cap">…e contando ♡</div>
+    </div>
+    <figure class="polaroid" style="--r:3deg" data-slot="capa"><span class="tape"></span><button class="ph" type="button"><em>foto de nós dois</em></button><figcaption>nós ♡</figcaption></figure>
+  </header>
+
+  <!-- CENA DA BALADA -->
+  <section class="scene" aria-label="A cena da balada" data-tab="balada">
+    <div class="eyebrow">Replay · Balada da integração</div>
+    <h2 style="color:#fff">Como tudo começou</h2>
+    <div class="chat" id="chat">
+      <div class="bubble him"><small>Gabriel, o veterano</small>Ei, caloura! Quer ficar com o meu amigo?</div>
+    </div>
+    <div class="choices" id="choices">
+      <button class="btn" id="btn-sim" type="button">Sim, claro!</button>
+      <button class="btn" id="btn-nao" type="button">Não… mas com você eu ficaria 😏</button>
+    </div>
+    <p class="small" style="color:#d9a9c0;margin:14px 0 0">Escolhe aí o que a Bianca respondeu.</p>
+  </section>
+
+  <!-- LINHA DO TEMPO -->
+  <section data-tab="historia">
+    <div class="eyebrow">Nossa história</div>
+    <h2>Capítulo por capítulo</h2>
+    <div class="timeline" style="margin-top:40px">
+      <article class="ch">
+        <div class="dot"></div>
+        <div>
+          <div class="when">Integração da faculdade</div>
+          <h2>A caloura e o veterano</h2>
+          <p>Foi na balada da integração. Ele chegou perguntando se eu queria ficar com um amigo dele. Eu disse que não.</p>
+          <p class="quote">“Mas com você eu ficaria.”</p>
+          <p>A gente se apaixonou quase na hora.</p>
+          <span class="place">📍 Angra dos Reis</span>
+        </div>
+        <figure class="polaroid" style="--r:-3deg" data-slot="comeco"><span class="tape"></span><button class="ph" type="button"><em>foto aqui</em></button><figcaption>o começo</figcaption></figure>
+      </article>
+
+      <article class="ch">
+        <div class="dot"></div>
+        <div>
+          <div class="when">Uma semana depois</div>
+          <h2>O reencontro</h2>
+          <p>Uma semana depois a gente se viu de novo. E não demorou nada pra estarmos morando juntos, dividindo a casa e a rotina de faculdade em Angra.</p>
+        </div>
+        <figure class="polaroid" style="--r:2.5deg" data-slot="casinha"><span class="tape"></span><button class="ph" type="button"><em>foto aqui</em></button><figcaption>nossa casinha</figcaption></figure>
+      </article>
+
+      <article class="ch big">
+        <div class="dot"></div>
+        <div>
+          <div class="when">2 de junho de 2022</div>
+          <h2>Namorados, oficialmente</h2>
+          <p>O dia que virou a nossa data. Tudo o que a gente já sabia ganhou nome.</p>
+        </div>
+        <figure class="polaroid" style="--r:-2deg" data-slot="namoro"><span class="tape"></span><button class="ph" type="button"><em>foto aqui</em></button><figcaption>02.06.22</figcaption></figure>
+      </article>
+
+      <article class="ch apart">
+        <div class="dot"></div>
+        <div>
+          <div class="when">2024</div>
+          <h2>Cada um numa cidade</h2>
+          <p>O Gabriel foi fazer estágio em Volta Redonda e a gente teve que deixar de morar junto. Depois eu fui pra Baixada. Foram dois anos de saudade, estrada, chamada de vídeo e contagem regressiva pro próximo fim de semana.</p>
+        </div>
+        <figure class="polaroid" style="--r:3deg" data-slot="distancia"><span class="tape"></span><button class="ph" type="button"><em>foto aqui</em></button><figcaption>a distância</figcaption></figure>
+      </article>
+
+      <article class="ch big">
+        <div class="dot"></div>
+        <div>
+          <div class="when">Novembro de 2025</div>
+          <h2>Juntos de novo</h2>
+          <p>Depois de dois anos longe, a gente conseguiu: mesma casa, mesma porta, mesmo café da manhã.</p>
+        </div>
+        <figure class="polaroid" style="--r:-2.5deg" data-slot="juntos"><span class="tape"></span><button class="ph" type="button"><em>foto aqui</em></button><figcaption>em casa ♡</figcaption></figure>
+      </article>
+    </div>
+  </section>
+
+  <!-- MAPA -->
+  <section class="map" aria-label="Os anos à distância" data-tab="distancia">
+    <div>
+      <div class="eyebrow" style="color:var(--sea)">2024 → novembro de 2025</div>
+      <h2>Os anos de estrada</h2>
+      <p style="margin:0;max-width:40ch">Angra, Volta Redonda, Baixada. Três pontos no mapa e um coração indo e voltando entre eles.</p>
+      <p class="small" style="margin:.6em 0 0">Distâncias em linha reta, usando Nova Iguaçu como referência da Baixada.</p>
+      <div class="stat">
+        <div><b>2</b><span>anos morando longe</span></div>
+        <div><b>72 km</b><span>entre Volta Redonda e a Baixada</span></div>
+        <div><b>58 km</b><span>entre Angra e Volta Redonda</span></div>
+        <div><b>∞</b><span>áudios de “chegou?”</span></div>
+      </div>
+    </div>
+    <svg viewBox="0 0 400 260" role="img" aria-label="Mapa esquemático: Volta Redonda ao norte, Angra dos Reis ao sul e a Baixada a leste">
+      <path d="M0 230 Q90 205 160 225 T300 205 T400 200 L400 260 L0 260Z" fill="var(--sea)" opacity=".15"/>
+      <text x="22" y="252" fill="var(--sea)" font-size="11" font-family="Figtree,sans-serif" opacity=".8">oceano Atlântico</text>
+      <path id="rota" d="M90 190 C110 120 150 70 170 60 C230 70 290 110 320 140" fill="none" stroke="var(--sea)" stroke-width="3" stroke-dasharray="7 7">
+        <animate attributeName="stroke-dashoffset" from="0" to="-28" dur="1.2s" repeatCount="indefinite"/>
+      </path>
+      <g font-family="Figtree,sans-serif" font-weight="600" font-size="14" fill="var(--ink)">
+        <circle cx="90" cy="190" r="9" fill="var(--accent)"/><text x="40" y="216">Angra</text>
+        <circle cx="170" cy="60" r="9" fill="var(--sea)"/><text x="122" y="40">Volta Redonda</text>
+        <circle cx="320" cy="140" r="9" fill="var(--sea)"/><text x="292" y="168">Baixada</text>
+      </g>
+      <g font-family="Figtree,sans-serif" font-weight="700" font-size="13" fill="var(--sea)">
+        <text x="62" y="128">58 km</text>
+        <text x="252" y="82">72 km</text>
+      </g>
+      <text font-size="22" text-anchor="middle" dominant-baseline="middle">❤️
+        <animateMotion dur="5s" repeatCount="indefinite" keyPoints="0;1;0" keyTimes="0;.5;1" calcMode="linear"><mpath href="#rota"/></animateMotion>
+      </text>
+    </svg>
+    <figure class="vc" id="vc-fig" hidden><img id="vc-img" alt="Videochamada: os dois fazendo meio coração com a mão, que se junta no meio da tela"><figcaption id="vc-cap"></figcaption></figure>
+  </section>
+
+  <!-- CONTAGENS -->
+  <section data-tab="inicio">
+    <div class="eyebrow">Marcando no calendário</div>
+    <h2>O que vem por aí</h2>
+    <div class="countdowns" style="margin-top:24px">
+      <div class="cd"><span class="small">Faltam para os</span><b id="cd-aniv">—</b><p id="cd-aniv-txt">dias para o aniversário de namoro</p></div>
+      <div class="cd"><span class="small">Juntos de novo há</span><b id="cd-volta">—</b><p id="cd-volta-txt">desde novembro de 2025</p></div>
+      <div class="cd"><span class="small">Já somam</span><b id="cd-fds">—</b><p>fins de semana desde 02/06/2022</p></div>
+    </div>
+  </section>
+
+  <!-- POTE DE MOTIVOS -->
+  <section data-tab="pote">
+    <div class="eyebrow">Pote de motivos</div>
+    <h2>Por que eu te amo</h2>
+    <div class="jar-wrap" style="margin-top:24px">
+      <button class="jar" id="jar" type="button" aria-label="Tirar um motivo do pote">
+        <svg viewBox="0 0 200 240" aria-hidden="true">
+          <rect x="55" y="8" width="90" height="26" rx="6" fill="var(--accent)"/>
+          <path d="M45 40 h110 q14 0 14 14 v150 q0 28 -28 28 h-82 q-28 0 -28 -28 v-150 q0 -14 14 -14z" fill="var(--paper)" stroke="var(--line)" stroke-width="4"/>
+          <g font-size="22" text-anchor="middle">
+            <text x="70" y="200">💌</text><text x="110" y="210">❤️</text><text x="140" y="190">💗</text>
+            <text x="85" y="170">💕</text><text x="125" y="160">💖</text><text x="95" y="135">❤️</text><text x="140" y="125">💌</text><text x="68" y="115">💗</text>
+          </g>
+          <text x="100" y="80" text-anchor="middle" font-family="Caveat,cursive" font-weight="700" font-size="26" fill="var(--accent)">me sacode</text>
+        </svg>
+      </button>
+      <div style="min-width:0">
+        <div class="note" id="note">Clica no pote pra tirar um motivo.</div>
+        <form class="add-row" id="add-form" hidden>
+          <input id="add-input" maxlength="180" placeholder="Escreve um motivo novo pro pote…" aria-label="Novo motivo">
+          <button class="btn" type="submit">Colocar no pote</button>
+        </form>
+        <p class="small" id="jar-count"></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- QUIZ -->
+  <section data-tab="quiz">
+    <div class="eyebrow">Quiz do casal</div>
+    <h2>Você conhece a nossa história?</h2>
+    <div class="quiz" id="quiz" style="margin-top:24px"></div>
+  </section>
+
+  <!-- GALERIA -->
+  <section data-tab="album">
+    <div class="eyebrow">Álbum</div>
+    <h2>Nossos momentos</h2>
+    <div class="upload-bar" id="upload-bar" hidden>
+      <select id="up-slot" aria-label="Onde a foto vai">
+        <option value="galeria">Álbum</option>
+        <option value="capa">Capa (nós dois)</option>
+        <option value="comeco">O começo</option>
+        <option value="casinha">Nossa casinha</option>
+        <option value="namoro">02.06.22</option>
+        <option value="distancia">A distância</option>
+        <option value="juntos">Juntos de novo</option>
+      </select>
+      <input type="text" id="up-cap" maxlength="40" placeholder="Legenda (opcional)" aria-label="Legenda">
+      <button class="btn" id="up-btn" type="button">＋ Adicionar fotos e vídeos</button>
+      <input type="file" id="up-file" multiple hidden>
+      <span id="status"></span>
+    </div>
+    <div class="gallery" id="gallery"></div>
+  </section>
+
+  <footer>
+    <span class="big">continua…</span>
+    Bianca &amp; Gabriel · desde 02.06.2022
+  </footer>
+</div>
+
+<div class="toast" id="toast" role="status" hidden></div>
+<a class="music" id="music" href="https://open.spotify.com/search/Por%20Voc%C3%AA%20J%C3%A3o" target="_blank" rel="noopener">
+  <span class="music-btn" aria-hidden="true">♪</span>
+  <span class="music-info"><b>Nossa música</b><span>Por Você · Jão, ouvir no Spotify</span></span>
+  <span id="music-btn" hidden></span><span id="music-ico" hidden></span><span id="music-title" hidden></span><audio id="music-audio" hidden></audio>
+</a>
+<div class="lb" id="lb" hidden><button class="x" id="lb-x" type="button" aria-label="Fechar">✕</button><figure><img id="lb-img" alt=""><video id="lb-vid" controls playsinline hidden></video><figcaption id="lb-cap"></figcaption>
+  <div class="lb-tools" id="lb-tools" hidden>
+    <label for="lb-move">Mover para</label>
+    <select id="lb-move">
+      <option value="galeria">Álbum</option>
+      <option value="capa">Capa (nós dois)</option>
+      <option value="comeco">O começo</option>
+      <option value="casinha">Nossa casinha</option>
+      <option value="namoro">02.06.22</option>
+      <option value="distancia">A distância</option>
+      <option value="juntos">Juntos de novo</option>
+    </select>
+    <input type="text" id="lb-legenda" maxlength="40" placeholder="Legenda" aria-label="Legenda">
+    <button class="btn" id="lb-save" type="button">Salvar</button>
+    <button class="btn ghost danger" id="lb-del" type="button">Remover foto</button>
+    <span id="lb-confirm" hidden>Tem certeza? <button class="btn danger" id="lb-del-yes" type="button">Sim, remover</button> <button class="btn ghost light" id="lb-del-no" type="button">Cancelar</button></span>
+    <span id="lb-msg"></span>
+  </div>
+</figure></div>
+
+<script>
+const $ = s => document.querySelector(s);
+const HEARTS = ['❤️','💖','💗','💕','💘'];
+function burst(x, y, n = 22){
+  for(let i=0;i<n;i++){
+    const h=document.createElement('span'); h.className='heart-fx';
+    h.textContent=HEARTS[i%HEARTS.length];
+    const a=Math.random()*Math.PI*2, d=80+Math.random()*160;
+    h.style.left=x+'px'; h.style.top=y+'px';
+    h.style.setProperty('--dx',Math.cos(a)*d+'px'); h.style.setProperty('--dy',Math.sin(a)*d-60+'px');
+    h.style.setProperty('--rot',(Math.random()*80-40)+'deg');
+    document.body.appendChild(h); setTimeout(()=>h.remove(),1500);
+  }
+}
+const center = el => { const r=el.getBoundingClientRect(); return [r.left+r.width/2, r.top+r.height/2]; };
+
+/* ---- abinhas ---- */
+const TAB_IDS=[...document.querySelectorAll('[data-go]')].map(b=>b.dataset.go);
+function showTab(t){
+  if(!TAB_IDS.includes(t)) t='inicio';
+  document.querySelectorAll('[data-tab]').forEach(el=>el.hidden=el.dataset.tab!==t);
+  document.querySelectorAll('[data-go]').forEach(b=>{const on=b.dataset.go===t;b.setAttribute('aria-selected',on);if(on)b.scrollIntoView({block:'nearest',inline:'center'});});
+  window.scrollTo({top:0});
+}
+document.querySelectorAll('[data-go]').forEach(b=>b.addEventListener('click',()=>{ if(location.hash==='#'+b.dataset.go) showTab(b.dataset.go); else location.hash=b.dataset.go; }));
+window.addEventListener('hashchange',()=>showTab(location.hash.slice(1)));
+showTab(location.hash.slice(1));
+
+/* ---- contador ao vivo ---- */
+const START = new Date(2022,5,2,0,0,0);
+function tick(){
+  let s=Math.floor((Date.now()-START)/1000);
+  const d=Math.floor(s/86400); s%=86400;
+  $('#t-d').textContent=d.toLocaleString('pt-BR');
+  $('#t-h').textContent=String(Math.floor(s/3600)).padStart(2,'0');
+  $('#t-m').textContent=String(Math.floor(s%3600/60)).padStart(2,'0');
+  $('#t-s').textContent=String(s%60).padStart(2,'0');
+}
+tick(); setInterval(tick,1000);
+
+/* ---- contagens ---- */
+(function(){
+  const now=new Date(), today=new Date(now.getFullYear(),now.getMonth(),now.getDate());
+  let next=new Date(now.getFullYear(),5,2); if(next<today) next=new Date(now.getFullYear()+1,5,2);
+  const dias=Math.round((next-today)/864e5), anos=next.getFullYear()-2022;
+  $('#cd-aniv').textContent = dias===0 ? 'HOJE!' : dias;
+  $('#cd-aniv-txt').textContent = dias===0 ? `${anos} anos de namoro 🎉` : `dias para os ${anos} anos de namoro (02/06/${next.getFullYear()})`;
+  const meses=(now.getFullYear()-2025)*12+now.getMonth()-10;
+  $('#cd-volta').textContent = meses>=12 ? (meses===12?'1 ano':`${Math.floor(meses/12)} ano${meses>=24?'s':''} e ${meses%12}m`) : `${Math.max(meses,0)} ${meses===1?'mês':'meses'}`;
+  if(meses===12) $('#cd-volta-txt').textContent='Este mês faz 1 ano que voltamos a morar juntos 🏡';
+  $('#cd-fds').textContent=Math.floor((today-START)/(7*864e5)).toLocaleString('pt-BR');
+})();
+
+/* ---- cena da balada ---- */
+const sim=$('#btn-sim');
+function flee(){
+  const box=$('#choices').getBoundingClientRect(), b=sim.getBoundingClientRect();
+  const maxX=Math.max(0,box.width-b.width), maxY=60;
+  sim.style.transform=`translate(${Math.random()*maxX - (b.left-box.left)}px,${Math.random()*maxY-30}px) rotate(${Math.random()*30-15}deg)`;
+}
+sim.addEventListener('mouseenter',flee);
+sim.addEventListener('touchstart',e=>{e.preventDefault();flee();},{passive:false});
+sim.addEventListener('click',e=>{e.preventDefault();flee();sim.textContent=['Não rola 🙅‍♀️','Tenta de novo','Nem pensar','Esse não!'][Math.floor(Math.random()*4)];});
+$('#btn-nao').addEventListener('click',e=>{
+  const chat=$('#chat');
+  const add=(cls,who,txt,delay)=>setTimeout(()=>{const b=document.createElement('div');b.className='bubble '+cls;b.innerHTML=`<small>${who}</small>`;b.append(txt);chat.appendChild(b);},delay);
+  add('her','Bianca, a caloura','Não… mas com você eu ficaria 😏',0);
+  add('him','Gabriel','…',700);
+  add('him','Gabriel','👀❤️',1500);
+  $('#choices').innerHTML='';
+  setTimeout(()=>{const p=document.createElement('p');p.className='scene-end';p.textContent='E foi assim que começou. Uma semana depois já estavam se vendo de novo.';$('#choices').appendChild(p);const [x,y]=center(chat);burst(x,y,36);},2200);
+});
+
+/* ---- quiz ---- */
+const QUIZ=[
+  {q:'Onde a gente se conheceu?',o:['Na fila do bandejão','Na balada da integração da faculdade','Num aplicativo','Na biblioteca'],a:1},
+  {q:'O que o Gabriel veio perguntar?',o:['Se eu tinha isqueiro','Meu Instagram','Se eu queria ficar com um amigo dele','Onde era o banheiro'],a:2},
+  {q:'Quanto tempo até a gente se ver de novo?',o:['Um mês','Uma semana','No dia seguinte','Só no semestre seguinte'],a:1},
+  {q:'Qual é a nossa data?',o:['12 de junho de 2022','2 de junho de 2022','2 de julho de 2022','14 de fevereiro de 2023'],a:1},
+  {q:'Pra onde o Gabriel foi fazer estágio?',o:['Resende','Rio de Janeiro','Volta Redonda','Paraty'],a:2},
+  {q:'Quanto tempo a gente morou separado?',o:['6 meses','1 ano','2 anos','3 anos'],a:2},
+  {q:'Quando voltamos a morar juntos?',o:['Novembro de 2025','Janeiro de 2026','Junho de 2025','Dezembro de 2024'],a:0},
+];
+let qi=0, score=0;
+function renderQuiz(){
+  const el=$('#quiz'); el.innerHTML='';
+  if(qi>=QUIZ.length){
+    const msg = score===QUIZ.length?'Gabarito! Você é parte dessa história 💘':score>=5?'Quase lá! Conhece bem esse casal 💕':'Precisa ouvir essa história mais vezes 😂';
+    el.innerHTML=`<div class="small">Resultado</div><div class="q">${score} de ${QUIZ.length}</div><p>${msg}</p>`;
+    const b=document.createElement('button');b.className='btn ghost';b.textContent='Jogar de novo';b.onclick=()=>{qi=0;score=0;renderQuiz();};el.appendChild(b);
+    if(score===QUIZ.length){const [x,y]=center(el);burst(x,y,40);}
+    return;
+  }
+  const it=QUIZ[qi];
+  el.insertAdjacentHTML('beforeend',`<div class="small">Pergunta ${qi+1} de ${QUIZ.length}</div><div class="progress"><i style="width:${qi/QUIZ.length*100}%"></i></div><div class="q"></div><div class="opts"></div>`);
+  el.querySelector('.q').textContent=it.q;
+  it.o.forEach((t,i)=>{
+    const b=document.createElement('button');b.type='button';b.className='opt';b.textContent=t;
+    b.onclick=()=>{
+      el.querySelectorAll('.opt').forEach(x=>x.disabled=true);
+      if(i===it.a){b.classList.add('ok');score++;const [x,y]=center(b);burst(x,y,10);}
+      else{b.classList.add('no');el.querySelectorAll('.opt')[it.a].classList.add('ok');}
+      setTimeout(()=>{qi++;renderQuiz();},1100);
+    };
+    el.querySelector('.opts').appendChild(b);
+  });
+}
+renderQuiz();
+
+/* ---- lightbox ---- */
+let lbFoto=null;
+function openLb(url,cap,foto){
+  lbFoto=foto||null;
+  const isVid=foto&&foto.tipo==='video', v=$('#lb-vid');
+  $('#lb-img').hidden=isVid; v.hidden=!isVid;
+  if(isVid){ v.src=url; v.play().catch(()=>{}); } else { v.pause(); v.removeAttribute('src'); $('#lb-img').src=url; }
+  $('#lb-cap').textContent=cap||''; $('#lb').hidden=false;
+  const can=!!(foto&&db);
+  $('#lb-tools').hidden=!can;
+  if(can){ $('#lb-move').value=foto.slot; $('#lb-legenda').value=foto.legenda||''; $('#lb-confirm').hidden=true; $('#lb-del').hidden=false; $('#lb-msg').textContent=''; }
+}
+function closeLb(){ $('#lb').hidden=true; $('#lb-vid').pause(); }
+$('#lb').addEventListener('click',e=>{ if(e.target.id==='lb'||e.target.id==='lb-x') closeLb(); });
+$('#lb-save').addEventListener('click',async()=>{
+  if(!lbFoto||!db) return;
+  try{ await db.doc('fotos/'+lbFoto.id).update({slot:$('#lb-move').value,legenda:$('#lb-legenda').value.trim()});
+    $('#lb').hidden=true; }
+  catch(e){ $('#lb-msg').textContent='Não consegui salvar. Você precisa ter permissão de edição nesse site.'; }
+});
+$('#lb-del').addEventListener('click',()=>{ $('#lb-del').hidden=true; $('#lb-confirm').hidden=false; });
+$('#lb-del-no').addEventListener('click',()=>{ $('#lb-del').hidden=false; $('#lb-confirm').hidden=true; });
+$('#lb-del-yes').addEventListener('click',async()=>{
+  if(!lbFoto||!db) return;
+  try{ await db.doc('fotos/'+lbFoto.id).delete();
+    if(assets&&lbFoto.assetId){ try{ await assets.delete(lbFoto.assetId); }catch(_){} }
+    $('#lb').hidden=true; }
+  catch(e){ $('#lb-msg').textContent='Não consegui remover. Você precisa ter permissão de edição nesse site.'; }
+});
+document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeLb(); });
+
+/* ---- fotos + pote (dados compartilhados) ---- */
+let FOTOS=[], MOTIVOS=[], db=null, assets=null, lastMotivo=-1;
+const ROT=[2,-3,1.5,-2,3,-1.5];
+
+/* foto ou vídeo dentro da moldura; molduras se ajustam a mídia deitada */
+function media(foto,box){
+  const fit=(w,h)=>{ if(w>h) box.style.aspectRatio=w+'/'+h; };
+  box.classList.toggle('is-video',foto.tipo==='video');
+  if(foto.tipo==='video'){
+    const v=document.createElement('video'); v.src=foto.url; v.muted=true; v.loop=true; v.playsInline=true; v.autoplay=true; v.preload='metadata';
+    v.setAttribute('aria-label',foto.legenda||'vídeo');
+    v.onloadedmetadata=()=>fit(v.videoWidth,v.videoHeight);
+    return v;
+  }
+  const img=new Image(); img.src=foto.url; img.alt=foto.legenda||''; img.loading='lazy';
+  img.onload=()=>fit(img.naturalWidth,img.naturalHeight);
+  return img;
+}
+
+/* cada capítulo ganha miniaturas extras e um botão de adicionar */
+document.querySelectorAll('.ch [data-slot]').forEach(f=>{
+  const w=document.createElement('div'); w.className='slotbox'; f.replaceWith(w);
+  const th=document.createElement('div'); th.className='thumbs';
+  const add=document.createElement('button'); add.type='button'; add.className='btn ghost add-media'; add.textContent='＋ foto ou vídeo'; add.hidden=true;
+  add.onclick=()=>{ $('#up-slot').value=f.dataset.slot; $('#up-cap').value=''; $('#up-file').click(); };
+  w.append(f,th,add);
+});
+let toastT;
+function say(msg,keep){ $('#status').textContent=msg; const t=$('#toast'); t.textContent=msg; t.hidden=false; clearTimeout(toastT); if(!keep) toastT=setTimeout(()=>t.hidden=true,3500); }
+
+function renderFotos(){
+  document.querySelectorAll('.slotbox').forEach(w=>{
+    const slot=w.querySelector('[data-slot]').dataset.slot;
+    const items=FOTOS.filter(p=>p.slot===slot).reverse().slice(1);
+    const th=w.querySelector('.thumbs'); th.innerHTML='';
+    items.forEach(p=>{ const b=document.createElement('button'); b.type='button'; b.className='thumb'; b.setAttribute('aria-label',p.legenda||(p.tipo==='video'?'vídeo':'foto'));
+      const m=media(p,b); if(m.tagName==='VIDEO') m.autoplay=false; b.style.aspectRatio=''; b.appendChild(m); b.onclick=()=>openLb(p.url,p.legenda,p); th.appendChild(b); });
+    w.querySelector('.add-media').hidden=!assets;
+  });
+  // slots dos capítulos: usa a foto mais recente de cada slot
+  document.querySelectorAll('[data-slot]').forEach(f=>{
+    const foto=[...FOTOS].reverse().find(p=>p.slot===f.dataset.slot);
+    const ph=f.querySelector('.ph');
+    if(foto){ ph.innerHTML=''; ph.style.aspectRatio=''; ph.appendChild(media(foto,ph));
+      const cap=f.querySelector('figcaption'); if(!cap.dataset.orig) cap.dataset.orig=cap.textContent;
+      cap.textContent=foto.legenda||cap.dataset.orig;
+      ph.onclick=()=>openLb(foto.url,cap.textContent,foto); }
+    else { const cap=f.querySelector('figcaption'); if(cap.dataset.orig) cap.textContent=cap.dataset.orig;
+      ph.innerHTML=`<em>${f.dataset.slot==='capa'?'foto de nós dois':'foto aqui'}</em>`;
+      ph.onclick=()=>{ if(assets){ $('#up-slot').value=f.dataset.slot; $('#up-file').click(); } }; }
+  });
+  const vc=[...FOTOS].reverse().find(p=>p.slot==='distancia'&&p.tipo!=='video'), vf=$('#vc-fig');
+  vf.hidden=!vc;
+  if(vc){ $('#vc-img').src=vc.url; $('#vc-cap').textContent=vc.legenda||'a distância'; vf.onclick=()=>openLb(vc.url,vc.legenda,vc); }
+  const g=$('#gallery'); g.innerHTML='';
+  const extra=FOTOS.filter(p=>p.slot==='galeria');
+  if(!extra.length){
+    const p=document.createElement('p'); p.className='small';
+    p.textContent = assets ? 'O álbum ainda está vazio. Usa o botão “Adicionar fotos” pra colocar as primeiras.' : 'O álbum ainda está vazio.';
+    g.appendChild(p); return;
+  }
+  extra.forEach((foto,i)=>{
+    const f=document.createElement('figure'); f.className='polaroid'; f.style.setProperty('--r',ROT[i%6]+'deg');
+    const b=document.createElement('button'); b.type='button'; b.className='ph';
+    b.appendChild(media(foto,b));
+    b.onclick=()=>openLb(foto.url,foto.legenda,foto);
+    const c=document.createElement('figcaption'); c.textContent=foto.legenda||'';
+    f.append(b,c); g.appendChild(f);
+  });
+}
+
+function renderJarCount(){ $('#jar-count').textContent = MOTIVOS.length ? `${MOTIVOS.length} motivo${MOTIVOS.length>1?'s':''} no pote` : 'O pote está vazio. Coloca o primeiro motivo!'; }
+$('#jar').addEventListener('click',()=>{
+  const [x,y]=center($('#jar')); burst(x,y,12);
+  const note=$('#note');
+  if(!MOTIVOS.length){ note.textContent='O pote está vazio… escreve o primeiro motivo aí embaixo 💌'; return; }
+  let i; do{ i=Math.floor(Math.random()*MOTIVOS.length);}while(MOTIVOS.length>1&&i===lastMotivo);
+  lastMotivo=i; note.style.animation='none'; void note.offsetWidth; note.style.animation=''; note.textContent=MOTIVOS[i].texto;
+});
+$('#add-form').addEventListener('submit',async e=>{
+  e.preventDefault(); const v=$('#add-input').value.trim(); if(!v) return;
+  if(!db){ $('#jar-count').textContent='Não consegui salvar agora. Abre a página logada no Claude pra adicionar motivos.'; return; }
+  try{ await db.collection('motivos').add({texto:v,criadoEm:new Date().toISOString()}); $('#add-input').value='';
+    $('#note').textContent=v; const [x,y]=center($('#note')); burst(x,y,16); }
+  catch(err){ $('#jar-count').textContent='Você não tem permissão pra adicionar motivos nesse link.'; }
+});
+
+/* redimensiona antes de subir pra ficar leve */
+function shrink(file){
+  return new Promise((res)=>{
+    const img=new Image(), u=URL.createObjectURL(file);
+    img.onload=()=>{ const max=1600, k=Math.min(1,max/Math.max(img.width,img.height));
+      const c=document.createElement('canvas'); c.width=Math.round(img.width*k); c.height=Math.round(img.height*k);
+      c.getContext('2d').drawImage(img,0,0,c.width,c.height); URL.revokeObjectURL(u);
+      c.toBlob(b=>res(b||file),'image/jpeg',.85); };
+    img.onerror=()=>{ URL.revokeObjectURL(u); res(file); };
+    img.src=u;
+  });
+}
+$('#up-btn').addEventListener('click',()=>$('#up-file').click());
+$('#up-file').addEventListener('change',async e=>{
+  const files=[...e.target.files]; e.target.value=''; if(!files.length||!assets||!db) return;
+  const slot=$('#up-slot').value, legenda=$('#up-cap').value.trim();
+  let ok=0;
+  let erro='';
+  for(const [i,f] of files.entries()){
+    say(`Enviando ${i+1} de ${files.length}…`,true);
+    const isVid=f.type.startsWith('video/')||/\.(mov|mp4|webm|m4v)$/i.test(f.name);
+    const isImg=f.type.startsWith('image/')||/\.(jpe?g|png|gif|webp|heic|heif)$/i.test(f.name);
+    if(!isVid&&!isImg){ erro=`“${f.name}” não é foto nem vídeo.`; continue; }
+    if(isVid&&f.size>20*1024*1024){ erro=`“${f.name}” passa de 20 MB, que é o limite por vídeo. Corta ou comprime ele antes.`; continue; }
+    try{ const blob=isVid?(/\.(mov|m4v)$/i.test(f.name)||f.type==='video/quicktime'?new Blob([f],{type:'video/mp4'}):f):await shrink(f); const r=await assets.upload(blob);
+      await db.collection('fotos').add({assetId:r.id,url:r.url,tipo:isVid?'video':'foto',slot,legenda,criadoEm:new Date().toISOString()}); ok++; }
+    catch(err){ erro=`Não deu pra enviar “${f.name}”${/heic|heif/i.test(f.name)?' (HEIC não abre no navegador, exporta como JPG)':''}.`; }
+  }
+  if(erro) say(erro);
+  else if(!ok) say('Nada foi enviado.');
+  if(ok){ if(!erro) say(`${ok} ${ok>1?'arquivos adicionados':'arquivo adicionado'} ♡`); $('#up-cap').value=''; const [x,y]=center($('#up-btn')); burst(x,y,20); }
+});
+
+/* ---- trilha sonora ---- */
+const au=$('#music-audio'); let musicaUrl=null, mutadoPeloUsuario=false;
+function setPlaying(on){ $('#music').classList.toggle('playing',on); $('#music-ico').textContent=on?'🔊':'🔇';
+  $('#music-btn').setAttribute('aria-pressed',on); $('#music-btn').setAttribute('aria-label',on?'Mutar a trilha sonora':'Tocar a trilha sonora'); }
+function tocar(){ if(!musicaUrl) return Promise.reject(); if(!au.src) au.src=musicaUrl; return au.play().then(()=>setPlaying(true)); }
+$('#music-btn').addEventListener('click',e=>{
+  e.stopPropagation();
+  if(!musicaUrl){ say('A música ainda não foi colocada no site.'); return; }
+  if(au.paused){ mutadoPeloUsuario=false; tocar().then(()=>{$('#toast').hidden=true;}).catch(()=>say('Não consegui tocar a música.')); }
+  else { au.pause(); setPlaying(false); mutadoPeloUsuario=true; }
+});
+// navegador só deixa tocar som depois do primeiro clique na página
+function primeira(e){ if(e&&e.target&&e.target.closest&&e.target.closest('#music')) return; if(musicaUrl&&!mutadoPeloUsuario&&au.paused) tocar().then(()=>{ $('#toast').hidden=true; ['pointerdown','keydown','touchstart'].forEach(ev=>document.removeEventListener(ev,primeira)); }).catch(()=>{}); }
+['pointerdown','keydown','touchstart'].forEach(ev=>document.addEventListener(ev,primeira));
+function autoTocar(){ if(mutadoPeloUsuario) return; tocar().catch(()=>say('♪ Toca em qualquer lugar da tela pra música começar',true)); }
+
+renderFotos(); renderJarCount();
+FOTOS=[{"url": "midia/01.jpg", "slot": "capa", "tipo": "foto", "legenda": "", "criadoEm": "2026-11-05T14:58:20.250Z"}, {"url": "midia/02.jpg", "slot": "comeco", "tipo": "foto", "legenda": "", "criadoEm": "2026-11-05T15:00:11.937Z"}, {"url": "midia/03.jpg", "slot": "namoro", "tipo": "foto", "legenda": "", "criadoEm": "2026-11-05T15:02:37.124Z"}, {"url": "midia/04.jpg", "slot": "casinha", "tipo": "foto", "legenda": "", "criadoEm": "2026-11-05T15:02:47.160Z"}, {"url": "midia/05.jpg", "slot": "distancia", "tipo": "foto", "legenda": "um coração, duas cidades", "criadoEm": "2026-11-05T15:15:00.000Z"}, {"url": "midia/06.jpg", "slot": "galeria", "tipo": "foto", "legenda": "", "criadoEm": "2026-11-05T15:23:46.934Z"}, {"url": "midia/07.jpg", "slot": "galeria", "tipo": "foto", "legenda": "", "criadoEm": "2026-11-05T15:23:47.964Z"}, {"url": "midia/08.mp4", "slot": "galeria", "tipo": "video", "legenda": "", "criadoEm": "2026-11-05T15:23:55.434Z"}, {"url": "midia/09.mp4", "slot": "galeria", "tipo": "video", "legenda": "", "criadoEm": "2026-11-05T15:23:56.497Z"}, {"url": "midia/10.mp4", "slot": "galeria", "tipo": "video", "legenda": "", "criadoEm": "2026-11-05T15:23:58.308Z"}, {"url": "midia/11.mp4", "slot": "galeria", "tipo": "video", "legenda": "", "criadoEm": "2026-11-05T15:23:59.580Z"}, {"url": "midia/12.mp4", "slot": "galeria", "tipo": "video", "legenda": "", "criadoEm": "2026-11-05T15:24:01.373Z"}, {"url": "midia/13.mp4", "slot": "galeria", "tipo": "video", "legenda": "", "criadoEm": "2026-11-05T15:24:03.385Z"}, {"url": "midia/14.mp4", "slot": "galeria", "tipo": "video", "legenda": "", "criadoEm": "2026-11-05T15:24:04.604Z"}, {"url": "midia/15.mp4", "slot": "galeria", "tipo": "video", "legenda": "", "criadoEm": "2026-11-05T15:24:06.198Z"}, {"url": "midia/16.mp4", "slot": "galeria", "tipo": "video", "legenda": "", "criadoEm": "2026-11-05T15:24:07.591Z"}, {"url": "midia/17.mp4", "slot": "galeria", "tipo": "video", "legenda": "", "criadoEm": "2026-11-05T15:24:08.689Z"}, {"url": "midia/18.mp4", "slot": "galeria", "tipo": "video", "legenda": "", "criadoEm": "2026-11-05T15:24:09.925Z"}, {"url": "midia/19.mp4", "slot": "galeria", "tipo": "video", "legenda": "", "criadoEm": "2026-11-05T15:24:11.144Z"}, {"url": "midia/20.mp4", "slot": "galeria", "tipo": "video", "legenda": "", "criadoEm": "2026-11-05T15:24:12.235Z"}, {"url": "midia/21.jpg", "slot": "galeria", "tipo": "foto", "legenda": "", "criadoEm": "2026-11-05T15:24:13.556Z"}, {"url": "midia/22.mp4", "slot": "galeria", "tipo": "video", "legenda": "", "criadoEm": "2026-11-05T15:24:14.851Z"}, {"url": "midia/23.mp4", "slot": "galeria", "tipo": "video", "legenda": "", "criadoEm": "2026-11-05T15:24:16.332Z"}, {"url": "midia/24.jpg", "slot": "galeria", "tipo": "foto", "legenda": "", "criadoEm": "2026-11-05T15:24:17.381Z"}, {"url": "midia/25.jpg", "slot": "galeria", "tipo": "foto", "legenda": "", "criadoEm": "2026-11-05T15:24:18.580Z"}, {"url": "midia/26.jpg", "slot": "galeria", "tipo": "foto", "legenda": "", "criadoEm": "2026-11-05T15:24:20.027Z"}, {"url": "midia/27.jpg", "slot": "galeria", "tipo": "foto", "legenda": "", "criadoEm": "2026-11-05T15:24:21.146Z"}, {"url": "midia/28.jpg", "slot": "galeria", "tipo": "foto", "legenda": "", "criadoEm": "2026-11-05T15:24:22.572Z"}, {"url": "midia/29.jpg", "slot": "galeria", "tipo": "foto", "legenda": "", "criadoEm": "2026-11-05T15:24:24.074Z"}, {"url": "midia/30.jpg", "slot": "galeria", "tipo": "foto", "legenda": "", "criadoEm": "2026-11-05T15:24:25.162Z"}, {"url": "midia/31.jpg", "slot": "galeria", "tipo": "foto", "legenda": "", "criadoEm": "2026-11-05T15:24:26.469Z"}, {"url": "midia/32.jpg", "slot": "galeria", "tipo": "foto", "legenda": "", "criadoEm": "2026-11-05T15:24:27.643Z"}, {"url": "midia/33.jpg", "slot": "galeria", "tipo": "foto", "legenda": "", "criadoEm": "2026-11-05T15:24:28.715Z"}, {"url": "midia/34.jpg", "slot": "galeria", "tipo": "foto", "legenda": "", "criadoEm": "2026-11-05T15:24:29.973Z"}, {"url": "midia/35.jpg", "slot": "galeria", "tipo": "foto", "legenda": "", "criadoEm": "2026-11-05T15:24:31.080Z"}, {"url": "midia/36.jpg", "slot": "galeria", "tipo": "foto", "legenda": "", "criadoEm": "2026-11-05T15:24:32.198Z"}, {"url": "midia/37.jpg", "slot": "galeria", "tipo": "foto", "legenda": "", "criadoEm": "2026-11-05T15:24:33.386Z"}, {"url": "midia/38.jpg", "slot": "galeria", "tipo": "foto", "legenda": "", "criadoEm": "2026-11-05T15:24:34.672Z"}, {"url": "midia/39.jpg", "slot": "galeria", "tipo": "foto", "legenda": "", "criadoEm": "2026-11-05T15:24:35.863Z"}, {"url": "midia/40.jpg", "slot": "galeria", "tipo": "foto", "legenda": "", "criadoEm": "2026-11-05T15:24:36.833Z"}, {"url": "midia/41.jpg", "slot": "galeria", "tipo": "foto", "legenda": "", "criadoEm": "2026-11-05T15:24:37.943Z"}, {"url": "midia/42.jpg", "slot": "galeria", "tipo": "foto", "legenda": "", "criadoEm": "2026-11-05T15:24:39.024Z"}, {"url": "midia/43.jpg", "slot": "galeria", "tipo": "foto", "legenda": "", "criadoEm": "2026-11-05T15:24:40.121Z"}, {"url": "midia/44.jpg", "slot": "galeria", "tipo": "foto", "legenda": "", "criadoEm": "2026-11-05T15:24:42.347Z"}, {"url": "midia/45.mp4", "slot": "juntos", "tipo": "video", "legenda": "", "criadoEm": "2026-11-05T15:25:00.000Z"}];
+MOTIVOS=[{"texto": "Por que com você eu me sinto livre"}, {"texto": "Por que com você eu me sinto segura"}, {"texto": "Por que você me transforma numa versão melhor de mim mesma"}, {"texto": "Por que você me faz rir"}, {"texto": "Por que você é a melhor companhia para se estar"}, {"texto": "Por que sua inteligência me causa inveja"}, {"texto": "Por que eu admiro quem você se tornou"}, {"texto": "Por que você é meu esquerdo macho"}, {"texto": "Por que você me entende (as vezes kkkk)"}];
+renderFotos(); renderJarCount();
+</script>
+
+</body></html>
