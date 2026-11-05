@@ -233,7 +233,6 @@ footer .big{font:700 2.4rem/1.1 var(--hand);color:var(--accent);display:block;ma
   <button class="tab" role="tab" data-go="inicio" type="button">♡ Início</button>
   <button class="tab" role="tab" data-go="musica" type="button">🎵 Nossa música</button>
   <button class="tab" role="tab" data-go="contagens" type="button">📅 Contagens</button>
-  <button class="tab" role="tab" data-go="balada" type="button">🪩 A balada</button>
   <button class="tab" role="tab" data-go="historia" type="button">📖 Nossa história</button>
   <button class="tab" role="tab" data-go="distancia" type="button">🚗 Distância</button>
   <button class="tab" role="tab" data-go="pote" type="button">💌 Pote de motivos</button>
@@ -262,8 +261,8 @@ footer .big{font:700 2.4rem/1.1 var(--hand);color:var(--accent);display:block;ma
   </header>
 
   <!-- CENA DA BALADA -->
-  <section class="scene" aria-label="A cena da balada" data-tab="balada">
-    <div class="eyebrow">Replay · Balada da integração</div>
+  <section class="scene" id="scene" aria-label="A cena da balada" data-tab="quiz">
+    <div class="eyebrow">Quiz · Pergunta zero · Balada da integração</div>
     <h2 style="color:#fff">Como tudo começou</h2>
     <div class="chat" id="chat">
       <div class="bubble him"><small>Gabriel, o veterano</small>Ei, caloura! Quer ficar com o meu amigo?</div>
@@ -425,7 +424,7 @@ footer .big{font:700 2.4rem/1.1 var(--hand);color:var(--accent);display:block;ma
   </section>
 
   <!-- QUIZ -->
-  <section data-tab="quiz">
+  <section data-tab="quiz" id="quiz-sec">
     <div class="eyebrow">Quiz do casal</div>
     <h2>Você conhece a nossa história?</h2>
     <div class="quiz" id="quiz" style="margin-top:24px"></div>
@@ -515,9 +514,12 @@ matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change',paintThem
 
 /* ---- abinhas ---- */
 const TAB_IDS=[...document.querySelectorAll('[data-go]')].map(b=>b.dataset.go);
+let sceneDone=false;
+function startQuiz(){ sceneDone=true; $('#scene').hidden=true; $('#quiz-sec').hidden=false; window.scrollTo({top:0}); }
 function showTab(t){
   if(!TAB_IDS.includes(t)) t='inicio';
   document.querySelectorAll('[data-tab]').forEach(el=>el.hidden=el.dataset.tab!==t);
+  if(t==='quiz'){ $('#scene').hidden=sceneDone; $('#quiz-sec').hidden=!sceneDone; }
   document.querySelectorAll('[data-go]').forEach(b=>{const on=b.dataset.go===t;b.setAttribute('aria-selected',on);if(on)b.scrollIntoView({block:'nearest',inline:'center'});});
   window.scrollTo({top:0});
 }
@@ -567,7 +569,9 @@ $('#btn-nao').addEventListener('click',e=>{
   add('him','Gabriel','…',700);
   add('him','Gabriel','👀❤️',1500);
   $('#choices').innerHTML='';
-  setTimeout(()=>{const p=document.createElement('p');p.className='scene-end';p.textContent='E foi assim que começou. Uma semana depois já estavam se vendo de novo.';$('#choices').appendChild(p);const [x,y]=center(chat);burst(x,y,36);},2200);
+  setTimeout(()=>{const p=document.createElement('p');p.className='scene-end';p.textContent='E foi assim que começou. Uma semana depois já estavam se vendo de novo.';$('#choices').appendChild(p);
+    const go=document.createElement('button');go.type='button';go.className='btn';go.style.background='#fff';go.style.color='#3a1424';go.textContent='Agora o quiz →';go.onclick=startQuiz;$('#choices').appendChild(go);
+    const [x,y]=center(chat);burst(x,y,36);},2200);
 });
 
 /* ---- quiz ---- */
