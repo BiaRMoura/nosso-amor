@@ -770,18 +770,18 @@ $('#up-file').addEventListener('change',async e=>{
 });
 
 /* ---- trilha sonora ---- */
-function ytAudio(divId,VID,loop){ let player=null, ready=null;
+function ytAudio(divId,VID,loop,START){ START=START||0; let player=null, ready=null;
   const o={src:'',paused:true,_end:null,removeAttribute(){},addEventListener(ev,fn){ if(ev==='ended') o._end=fn; },
     play(){ return ensure().then(p=>new Promise((res,rej)=>{ p.unMute(); p.setVolume(100); p.playVideo(); let t=0;
       const iv=setInterval(()=>{ const st=p.getPlayerState(); if(st===1){clearInterval(iv);o.paused=false;res();} else if(++t>25){clearInterval(iv);p.pauseVideo();rej(new Error('bloqueado'));} },120); })); },
     pause(){ o.paused=true; if(player) player.pauseVideo(); } };
   function ensure(){ if(ready) return ready; ready=ytApi().then(()=>new Promise(res=>{ player=new YT.Player(divId,{width:200,height:200,videoId:VID,
-      playerVars:Object.assign({playsinline:1,controls:0,rel:0},loop?{loop:1,playlist:VID}:{}),
-      events:{onReady:()=>res(player),onStateChange:e=>{ if(e.data===0&&!loop){ o.paused=true; o._end&&o._end(); } }}}); })); return ready; }
+      playerVars:{playsinline:1,controls:0,rel:0,start:START},
+      events:{onReady:()=>res(player),onStateChange:e=>{ if(e.data!==0) return; if(loop&&!o.paused){ player.seekTo(START,true); player.playVideo(); } else { o.paused=true; o._end&&o._end(); } }}}); })); return ready; }
   return o; }
 let _ytApi=null; function ytApi(){ if(_ytApi) return _ytApi; _ytApi=new Promise(res=>{ if(window.YT&&YT.Player) return res(); window.onYouTubeIframeAPIReady=res;
   const sc=document.createElement('script'); sc.src='https://www.youtube.com/iframe_api'; document.head.appendChild(sc); }); return _ytApi; }
-const au=ytAudio('yt-player','9J4uukzYHUA',true); let musicaUrl=null, mutadoPeloUsuario=false;
+const au=ytAudio('yt-player','9J4uukzYHUA',true,25); let musicaUrl=null, mutadoPeloUsuario=false;
 function setPlaying(on){ $('#music').classList.toggle('playing',on); $('#music-ico').textContent=on?'🔊':'🔇';
   $('#music-btn').setAttribute('aria-pressed',on); $('#music-btn').setAttribute('aria-label',on?'Mutar a trilha sonora':'Tocar a trilha sonora'); }
 function tocar(){ if(!musicaUrl) return Promise.reject(); if(!au.src) au.src=musicaUrl; return au.play().then(()=>setPlaying(true)); }
