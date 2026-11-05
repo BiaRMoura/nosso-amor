@@ -132,6 +132,11 @@ h1 .amp{font-family:var(--hand);color:var(--accent);font-size:1.15em;display:inl
 .toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:.7em 1.2em;border-radius:99px;z-index:70;font-weight:600;max-width:calc(100% - 32px);text-align:center;box-shadow:0 10px 30px rgba(0,0,0,.25)}
 
 /* trilha sonora */
+.music-links{display:flex;gap:6px;margin-left:4px}
+.ml{font:700 .75rem/1 var(--body);text-decoration:none;color:#fff;padding:.55em .8em;border-radius:99px;white-space:nowrap;transition:transform .15s}
+.ml:hover{transform:translateY(-2px)}
+.ml.yt{background:#e62117}
+.ml.sp{background:#1db954}
 #yt-wrap,#yt-player{position:fixed;left:-9999px;top:0;width:200px;height:200px;pointer-events:none}
 .music{position:fixed;right:calc(16px + env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:40;display:flex;align-items:center;gap:10px;background:var(--paper);border:1px solid var(--line);border-radius:99px;padding:6px 16px 6px 6px;box-shadow:0 8px 24px rgba(58,20,36,.18)}
 .music-btn{width:44px;height:44px;border-radius:50%;border:0;background:var(--accent);color:#fff;font-size:1.2rem;display:grid;place-items:center}
@@ -428,7 +433,7 @@ footer .big{font:700 2.4rem/1.1 var(--hand);color:var(--accent);display:block;ma
 <div class="toast" id="toast" role="status" hidden></div>
 <div class="music" id="music">
   <button class="music-btn" id="music-btn" type="button" aria-label="Tocar a trilha sonora" aria-pressed="false"><span id="music-ico">🔇</span></button>
-  <div class="music-info"><b>Trilha sonora</b><span id="music-title">Jão</span></div>
+  <div class="music-info"><b>Trilha sonora</b><span id="music-title">Jão</span></div><span class="music-links"><a class="ml yt" href="https://www.youtube.com/watch?v=9J4uukzYHUA" target="_blank" rel="noopener" aria-label="Abrir Por Você no YouTube">▶ YouTube</a><a class="ml sp" href="https://open.spotify.com/search/Por%20Voc%C3%AA%20J%C3%A3o" target="_blank" rel="noopener" aria-label="Abrir Por Você no Spotify">● Spotify</a></span>
   <div id="yt-player" aria-hidden="true"></div>
 </div>
 <div class="lb" id="lb" hidden><button class="x" id="lb-x" type="button" aria-label="Fechar">✕</button><figure><img id="lb-img" alt=""><video id="lb-vid" controls playsinline hidden></video><figcaption id="lb-cap"></figcaption>
